@@ -1,0 +1,27 @@
+version: '3.0'
+services:
+  mysqldb:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: online_store
+    ports:
+      - "3306:3306"
+    networks:
+      - mynetwork
+    volumes:
+      - .m2:/root/.m2
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysqldb
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
