@@ -6,10 +6,12 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 @Controller
 @SuppressWarnings("unused")
-public class AuthenticationQueryResolver implements GraphQLQueryResolver {
+@CrossOrigin
+public class AuthenticationQueryResolver {
     private final AuthenticationService service;
     @Autowired
     public AuthenticationQueryResolver(AuthenticationService service) {
