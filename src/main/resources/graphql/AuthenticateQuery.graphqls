@@ -1,0 +1,21 @@
+type Query {
+    authenticate(email: String!, password: String!): String
+    getAllItems: [FunkoPop!]!
+    getItem(id: Int!): FunkoPop
+}
+
+type FunkoPop{
+    id: Int!
+    name: String!
+    images: [String]
+    price: Int!
+    amount: Int
+    description: String
+    sale: Boolean
+    license: String
+    sublicense: String
+    series: String
+    category: String
+    productType: String
+    date: String
+}

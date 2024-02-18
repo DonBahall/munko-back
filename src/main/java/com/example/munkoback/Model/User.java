@@ -26,7 +26,8 @@ public class User implements UserDetails {
     private String email;
     private String phone;
     private String password;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

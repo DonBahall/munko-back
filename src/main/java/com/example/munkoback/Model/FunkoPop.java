@@ -18,8 +18,8 @@ public class FunkoPop {
     private String name;
     @ElementCollection
     private List<String> images;
-    private Double price;
-    private Long amount;
+    private Integer price;
+    private Integer amount;
     private String description;
     private Boolean sale;
     private String license;
