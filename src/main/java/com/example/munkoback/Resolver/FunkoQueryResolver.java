@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
-
-@SuppressWarnings("unused")
 @Controller
 @CrossOrigin
 public class FunkoQueryResolver {
