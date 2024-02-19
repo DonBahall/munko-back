@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 @Controller
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:3000")
 public class AuthenticationQueryResolver {
     private final AuthenticationService service;
     @Autowired

@@ -11,6 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 
 @Configuration
@@ -24,6 +27,15 @@ public class SecurityConfig  {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .cors()
+                .configurationSource(request -> {
+                    CorsConfiguration corsConfig = new CorsConfiguration();
+                    corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
+                    corsConfig.setAllowedMethods(List.of("GET", "POST"));
+                    corsConfig.setAllowedHeaders(List.of("*"));
+                    return corsConfig;
+                })
+                .and()
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
@@ -40,8 +52,8 @@ public class SecurityConfig  {
                 .logout()
                 .logoutUrl("/users/auth/logout")
                 .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-        ;
 
+        ;
         return http.build();
     }
 }
