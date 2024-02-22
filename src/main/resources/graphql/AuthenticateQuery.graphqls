@@ -1,5 +1,6 @@
 type Query {
     authenticate(email: String!, password: String!): String
+    registration(user: UserInput!): User
     getAllItems: [FunkoPop!]!
     getItem(id: Int!): FunkoPop
 }
@@ -18,4 +19,46 @@ type FunkoPop{
     category: String
     productType: String
     date: String
+}
+
+type User{
+    id:Int!
+    firstName:String!
+    lastName:String!
+    email:String!
+    phone:String!
+    password:String!
+    address: Address
+    orders: [Order]
+    role: String!
+}
+type Address{
+    id:Int!
+    userId:Int!
+    locality:String
+    postOffice:String
+}
+type Order{
+    id: Int!
+    user: User
+    funkoId: Int
+    amount: Int
+}
+input UserInput{
+    id:Int!
+    firstName:String!
+    lastName:String!
+    email:String!
+    phone:String!
+    password:String!
+    address: AddressInput
+    orders:String!
+    role: String!
+}
+
+input AddressInput{
+    id:Int!
+    userId:Int!
+    locality:String
+    postOffice:String
 }

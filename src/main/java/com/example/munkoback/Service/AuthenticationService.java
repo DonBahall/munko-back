@@ -1,7 +1,5 @@
 package com.example.munkoback.Service;
 
-import com.example.munkoback.Model.Token;
-import com.example.munkoback.Model.TokenType;
 import com.example.munkoback.Model.User;
 import com.example.munkoback.Repository.TokenRepo;
 import com.example.munkoback.Repository.UserRepo;
@@ -9,6 +7,7 @@ import com.example.munkoback.Request.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,13 +29,23 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, jwtToken);
-        return jwtToken;
+          revokeAllUserTokens(user);
+        //saveUserToken(user, jwtToken);
+        return jwtService.generateToken(user);
     }
 
-    private void saveUserToken(User user, String jwtToken) {
+    public User registerUser(User request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            return request;
+        }
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(request.getPassword());
+        request.setPassword(hashedPassword);
+        return repository.save(request);
+    }
+
+
+  /*  private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()
                 .user(user)
                 .token(jwtToken)
@@ -46,7 +55,7 @@ public class AuthenticationService {
                 .build();
         tokenRepository.save(token);
     }
-
+*/
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
