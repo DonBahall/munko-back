@@ -52,8 +52,15 @@ input UserInput{
     phone:String!
     password:String!
     address: AddressInput
-    orders:String!
+    orders:[OrderInput]
     role: String!
+}
+
+input OrderInput{
+    id: Int!
+    user: UserInput
+    funkoId: Int
+    amount: Int
 }
 
 input AddressInput{

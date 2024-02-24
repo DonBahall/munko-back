@@ -1,0 +1,11 @@
+type Mutation{
+    save(entity: ReviewInput): Review
+}
+
+input ReviewInput{
+    id: Int!
+    userId: Int!
+    funkoId: Int!
+    review: String!
+    star: Int!
+}

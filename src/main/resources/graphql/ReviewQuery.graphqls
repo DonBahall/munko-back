@@ -1,0 +1,12 @@
+extend type Query {
+    getAllReviews: [Review]
+    getFunkoReviews(funkoId: Int): [Review]
+}
+
+type Review{
+    id: Int!
+    userId: Int!
+    funkoId: Int!
+    review: String!
+    star: Int!
+}

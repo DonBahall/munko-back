@@ -19,4 +19,5 @@ public class Review {
     private Integer userId;
     private Integer funkoId;
     private String review;
+    private Integer star;
 }
