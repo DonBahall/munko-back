@@ -28,5 +28,4 @@ public class FunkoPop {
     private String category;
     private String productType;
     private String date;
-    private Boolean favorite;
 }

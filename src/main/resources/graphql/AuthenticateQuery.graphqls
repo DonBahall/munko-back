@@ -1,6 +1,5 @@
 type Query {
     authenticate(email: String!, password: String!): String
-    registration(user: UserInput!): User
     getAllItems: [FunkoPop!]!
     getItem(id: Int!): FunkoPop
 }
@@ -31,6 +30,7 @@ type User{
     address: Address
     orders: [Order]
     role: String!
+    favorite: [Int]
 }
 type Address{
     id:Int!

@@ -1,5 +1,7 @@
 type Mutation{
     save(entity: ReviewInput): Review
+    updateReview(entity: ReviewInput): Review
+    deleteReview(entity: Int): Boolean
 }
 
 input ReviewInput{

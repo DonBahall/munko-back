@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -43,7 +45,26 @@ public class AuthenticationService {
         request.setPassword(hashedPassword);
         return repository.save(request);
     }
+    public User updateUser(User request){
+        if(request.getId() == null) {
+           return null;
+        }
+        User existing = repository.findById(request.getId()).orElse(null);
+        if(existing == null){
+            return null;
+        }
+        existing.setFirstName(request.getFirstName());
+        existing.setLastName(request.getLastName());
+        existing.setEmail(request.getEmail());
+        existing.setPhone(request.getPhone());
+        existing.setPassword(request.getPassword());
+        existing.setAddress(request.getAddress());
+        existing.setOrders(request.getOrders());
+        existing.setRole(request.getRole());
+        existing.setFavorite(request.getFavorite());
 
+       return repository.save(existing);
+    }
 
   /*  private void saveUserToken(User user, String jwtToken) {
         var token = Token.builder()

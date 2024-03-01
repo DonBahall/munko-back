@@ -16,6 +16,4 @@ public class Address {
     private Long userId;
     private String locality;
     private String postOffice;
-
-
 }

@@ -18,4 +18,12 @@ public class ReviewMutationResolver {
     public Review save(Review entity){
         return service.save(entity);
     }
+    @MutationMapping
+    public Review updateReview(Review entity){
+        return service.updateReview(entity);
+    }
+    @MutationMapping
+    public Boolean deleteReview(Integer entity){
+        return service.deleteReview(entity);
+    }
 }
