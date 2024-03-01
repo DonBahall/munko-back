@@ -5,12 +5,11 @@ import com.example.munkoback.Repository.TokenRepo;
 import com.example.munkoback.Repository.UserRepo;
 import com.example.munkoback.Request.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +44,7 @@ public class AuthenticationService {
         request.setPassword(hashedPassword);
         return repository.save(request);
     }
+    @PreAuthorize("hasAuthority('USER')")
     public User updateUser(User request){
         if(request.getId() == null) {
            return null;

@@ -19,11 +19,11 @@ public class ReviewMutationResolver {
         return service.save(entity);
     }
     @MutationMapping
-    public Review updateReview(Review entity){
-        return service.updateReview(entity);
+    public Review updateReview(Review entity, Integer userid){
+        return service.updateReview(entity, userid);
     }
     @MutationMapping
-    public Boolean deleteReview(Integer entity){
-        return service.deleteReview(entity);
+    public Boolean deleteReview(Integer entity, Integer userid){
+        return service.deleteReview(entity, userid);
     }
 }
