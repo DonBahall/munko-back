@@ -2,6 +2,7 @@ package com.example.munkoback.Resolver;
 
 import com.example.munkoback.Model.Review;
 import com.example.munkoback.Service.ReviewService;
+import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,15 +16,15 @@ public class ReviewMutationResolver {
         this.service = service;
     }
     @MutationMapping
-    public Review save(Review entity){
-        return service.save(entity);
+    public Review save(@Argument Review entity){
+        return service.saveReview(entity);
     }
     @MutationMapping
-    public Review updateReview(Review entity, Integer userid){
-        return service.updateReview(entity, userid);
+    public Review updateReview(@Argument Review entity){
+        return service.updateReview(entity);
     }
     @MutationMapping
-    public Boolean deleteReview(Integer entity, Integer userid){
-        return service.deleteReview(entity, userid);
+    public Boolean deleteReview(@Argument Integer entity){
+        return service.deleteReview(entity);
     }
 }
