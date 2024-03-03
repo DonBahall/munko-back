@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @Controller
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "https://munko-front.vercel.app"})
 public class FunkoQueryResolver {
     private final FunkoPopService service;
     @Autowired

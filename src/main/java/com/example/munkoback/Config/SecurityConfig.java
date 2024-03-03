@@ -30,8 +30,8 @@ public class SecurityConfig  {
                 .cors()
                 .configurationSource(request -> {
                     CorsConfiguration corsConfig = new CorsConfiguration();
-                    corsConfig.setAllowedOrigins(List.of("http://localhost:3000"));
-                    corsConfig.setAllowedMethods(List.of("GET", "POST"));
+                    corsConfig.setAllowedOrigins(List.of("http://localhost:3000", "https://munko-front.vercel.app"));
+                    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
                     corsConfig.setAllowedHeaders(List.of("*"));
                     return corsConfig;
                 })
