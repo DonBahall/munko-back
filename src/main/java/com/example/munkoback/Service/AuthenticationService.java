@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +31,7 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-          revokeAllUserTokens(user);
-        //saveUserToken(user, jwtToken);
+        revokeAllUserTokens(user);
         return jwtService.generateToken(user);
     }
 
@@ -42,9 +42,10 @@ public class AuthenticationService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
+
         return repository.save(request);
     }
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public User updateUser(User request){
         if(request.getId() == null) {
            return null;
@@ -57,6 +58,10 @@ public class AuthenticationService {
         existing.setLastName(request.getLastName());
         existing.setEmail(request.getEmail());
         existing.setPhone(request.getPhone());
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        existing.setPassword(passwordEncoder.encode(request.getPassword()));
+
         existing.setPassword(request.getPassword());
         existing.setAddress(request.getAddress());
         existing.setOrders(request.getOrders());
@@ -66,17 +71,10 @@ public class AuthenticationService {
        return repository.save(existing);
     }
 
-  /*  private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
-                .user(user)
-                .token(jwtToken)
-                .tokenType(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
-        tokenRepository.save(token);
+    public User getAutentificatedUser() {
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
-*/
+
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty())
