@@ -28,7 +28,7 @@ public class ReviewService {
         User user = authenticationService.getAutentificatedUser();
         entity.setUserId(user.getId());
         if(entity.getStar() < 0 || entity.getStar() > 5 ) return null;
-        if(getAllReviews().contains(repository.findByFunkoIdAndUserId(entity.getFunkoId(),entity.getUserId()))) return null;
+        if(getAllReviews().contains(repository.findByFunkoIdAndUserId(entity.getFunkoId(), entity.getUserId()))) return null;
         return repository.save(entity);
     }
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")

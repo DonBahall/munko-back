@@ -4,14 +4,10 @@ import com.example.munkoback.Model.Review;
 import com.example.munkoback.Service.ReviewService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.stereotype.Component;
 
 
-@Controller
-@CrossOrigin(origins = "http://localhost:3000")
+@Component
 public class ReviewMutationResolver {
     private final ReviewService service;
 

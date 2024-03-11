@@ -1,5 +1,6 @@
 package com.example.munkoback.Service;
 
+import com.example.munkoback.Model.Role;
 import com.example.munkoback.Model.User;
 import com.example.munkoback.Repository.TokenRepo;
 import com.example.munkoback.Repository.UserRepo;
@@ -42,12 +43,14 @@ public class AuthenticationService {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
+        request.setRole(Role.USER);
 
         return repository.save(request);
     }
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public User updateUser(User request){
-        if(request.getId() == null) {
+        User user = getAutentificatedUser();
+        if(request.getId() == null || !user.getId().equals(request.getId())) {
            return null;
         }
         User existing = repository.findById(request.getId()).orElse(null);

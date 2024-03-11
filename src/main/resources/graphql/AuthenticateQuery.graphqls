@@ -29,7 +29,7 @@ type User{
     password:String!
     address: Address
     orders: [Order]
-    role: String!
+    role: String
     favorite: [Int]
 }
 type Address{

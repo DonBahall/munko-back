@@ -1,17 +1,14 @@
 package com.example.munkoback.Resolver;
 
-
 import com.example.munkoback.Model.Review;
 import com.example.munkoback.Service.ReviewService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Controller
-@CrossOrigin(origins = "http://localhost:3000")
+@Component
 public class ReviewQueryResolver {
     private final ReviewService service;
 
