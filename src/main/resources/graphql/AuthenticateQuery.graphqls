@@ -21,12 +21,12 @@ type FunkoPop{
 }
 
 type User{
-    id:Int!
-    firstName:String!
-    lastName:String!
-    email:String!
-    phone:String!
-    password:String!
+    id: Int!
+    firstName: String!
+    lastName: String
+    email: String!
+    phone: String
+    password: String!
     address: Address
     orders: [Order]
     role: String
@@ -47,13 +47,13 @@ type Order{
 input UserInput{
     id:Int!
     firstName:String!
-    lastName:String!
+    lastName:String
     email:String!
-    phone:String!
+    phone:String
     password:String!
     address: AddressInput
     orders:[OrderInput]
-    role: String!
+    role: String
 }
 
 input OrderInput{
