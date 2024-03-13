@@ -4,10 +4,10 @@ import com.example.munkoback.Model.Review;
 import com.example.munkoback.Service.ReviewService;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 
-@Component
+@Controller
 public class ReviewMutationResolver {
     private final ReviewService service;
 

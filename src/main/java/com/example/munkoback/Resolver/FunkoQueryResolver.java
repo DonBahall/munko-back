@@ -6,12 +6,12 @@ import com.example.munkoback.Service.FunkoPopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
-@Component
+@Controller
 @CrossOrigin(origins = {"http://localhost:3000", "https://munko-front.vercel.app"})
 public class FunkoQueryResolver {
     private final FunkoPopService service;
