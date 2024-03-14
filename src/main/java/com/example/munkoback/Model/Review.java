@@ -17,6 +17,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private Integer userId;
+    private String username;
     private Integer funkoId;
     private String review;
     private Integer star;

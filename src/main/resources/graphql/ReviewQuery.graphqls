@@ -9,4 +9,5 @@ type Review{
     funkoId: Int!
     review: String!
     star: Int!
+    username: String
 }
