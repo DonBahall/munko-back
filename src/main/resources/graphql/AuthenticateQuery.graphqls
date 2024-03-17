@@ -45,7 +45,7 @@ type Order{
     amount: Int
 }
 input UserInput{
-    id:Int!
+    id:Int
     firstName:String!
     lastName:String
     email:String!
