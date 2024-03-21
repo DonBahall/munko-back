@@ -1,0 +1,28 @@
+package com.example.munkoback.Model.Paging_Sorting;
+
+public enum OrderBy {
+    EmailAsc,
+    EmailDesc,
+    FirstNameAsc,
+    FirstNameDesc,
+    LastNameAsc,
+    LastNameDesc,
+    IdAsc,
+    IdDesc,
+    NameAsc,
+    NameDesc,
+    DescriptionAsc,
+    DescriptionDesc,
+    DateAsc,
+    DateDesc,
+    TypeAsc,
+    TypeDesc,
+    FullNameAsc,
+    FullNameDesc,
+    PriceAsc,
+    PriceDesc,
+    CategoryAsk,
+    CategoryDesc,
+    SeriesAsk,
+    SeriesDesc,
+}

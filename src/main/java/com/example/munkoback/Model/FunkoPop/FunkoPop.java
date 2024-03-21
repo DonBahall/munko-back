@@ -1,4 +1,4 @@
-package com.example.munkoback.Model;
+package com.example.munkoback.Model.FunkoPop;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,0 +1,38 @@
+input SearchPaging {
+    page: Int! = 0
+    perPage: Int! = 15
+}
+
+type Paging {
+    page: Int!
+    perPage: Int!
+    pageCount: Int!
+    totalCount: Int!
+}
+
+enum OrderBy {
+    EmailAsc,
+    EmailDesc,
+    FirstNameAsc,
+    FirstNameDesc,
+    LastNameAsc,
+    LastNameDesc,
+    IdAsc,
+    IdDesc,
+    NameAsc,
+    NameDesc,
+    DescriptionAsc,
+    DescriptionDesc,
+    DateAsc,
+    DateDesc,
+    TypeAsc,
+    TypeDesc,
+    FullNameAsc,
+    FullNameDesc,
+    PriceAsc,
+    PriceDesc,
+    CategoryAsk,
+    CategoryDesc,
+    SeriesAsk,
+    SeriesDesc,
+}
