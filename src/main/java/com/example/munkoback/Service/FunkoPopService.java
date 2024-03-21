@@ -3,6 +3,7 @@ package com.example.munkoback.Service;
 import com.example.munkoback.Model.FunkoPop.FunkoPop;
 import com.example.munkoback.Model.FunkoPop.FunkoPops;
 import com.example.munkoback.Model.FunkoPop.FunkoSearchCriteria;
+import com.example.munkoback.Model.FunkoPop.PriceSearch;
 import com.example.munkoback.Model.Paging_Sorting.OrderBy;
 import com.example.munkoback.Model.Paging_Sorting.Paging;
 import com.example.munkoback.Model.Paging_Sorting.SearchPaging;
@@ -57,7 +58,13 @@ public class FunkoPopService {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("name")), "%" + searchCriteria.getName().toLowerCase() + "%"));
             }
             if (searchCriteria.getPrice() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("price"), searchCriteria.getPrice()));
+                PriceSearch priceRange = searchCriteria.getPrice();
+                if (priceRange.getFrom() != null) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"), priceRange.getFrom()));
+                }
+                if (priceRange.getTo() != null) {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceRange.getTo()));
+                }
             }
             if (searchCriteria.getSeries() != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("series")), "%" + searchCriteria.getSeries().toLowerCase() + "%"));

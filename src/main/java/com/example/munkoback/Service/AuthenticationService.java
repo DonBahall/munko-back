@@ -2,7 +2,6 @@ package com.example.munkoback.Service;
 
 import com.example.munkoback.Model.Role;
 import com.example.munkoback.Model.User;
-import com.example.munkoback.Repository.TokenRepo;
 import com.example.munkoback.Repository.UserRepo;
 import com.example.munkoback.Request.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserRepo repository;
-    private final TokenRepo tokenRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -32,7 +30,6 @@ public class AuthenticationService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        revokeAllUserTokens(user);
         return jwtService.generateToken(user);
     }
 
@@ -76,16 +73,5 @@ public class AuthenticationService {
 
     public User getAutentificatedUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
-    private void revokeAllUserTokens(User user) {
-        var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-        if (validUserTokens.isEmpty())
-            return;
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
-        });
-        tokenRepository.saveAll(validUserTokens);
     }
 }

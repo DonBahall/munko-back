@@ -10,6 +10,11 @@ type Paging {
     totalCount: Int!
 }
 
+input Price {
+    from: Int!
+    to: Int!
+}
+
 enum OrderBy {
     EmailAsc,
     EmailDesc,
