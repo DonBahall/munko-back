@@ -16,12 +16,6 @@ input Price {
 }
 
 enum OrderBy {
-    EmailAsc,
-    EmailDesc,
-    FirstNameAsc,
-    FirstNameDesc,
-    LastNameAsc,
-    LastNameDesc,
     IdAsc,
     IdDesc,
     NameAsc,
@@ -32,8 +26,6 @@ enum OrderBy {
     DateDesc,
     TypeAsc,
     TypeDesc,
-    FullNameAsc,
-    FullNameDesc,
     PriceAsc,
     PriceDesc,
     CategoryAsk,

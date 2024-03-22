@@ -17,28 +17,29 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import jakarta.persistence.criteria.Predicate;
 
 @Service
 public class FunkoPopService {
     private final FunkoPopRepository repository;
+
     public FunkoPopService(FunkoPopRepository repository) {
         this.repository = repository;
     }
 
     public FunkoPops getAllItems(SearchPaging paging, OrderBy orderBy, FunkoSearchCriteria searchCriteria) {
         Sort sort = getSort(orderBy);
-        if(paging == null){
+        if (paging == null) {
             paging = new SearchPaging();
             paging.setPage(0);
             paging.setPerPage(15);
         }
         Pageable pageRequest = PageRequest.of(paging.getPage(), paging.getPerPage(), sort);
         Page<FunkoPop> page;
-        if (searchCriteria != null && (searchCriteria.getName() != null ||  searchCriteria.getSeries() != null ||
-                searchCriteria.getCategory() != null || searchCriteria.getPrice() != null)) {
+        if (searchCriteria != null) {
             page = repository.findAll(constructSpecification(searchCriteria), pageRequest);
-        }else {
+        } else {
             page = repository.findAll(pageRequest);
         }
         return new FunkoPops(
@@ -50,6 +51,7 @@ public class FunkoPopService {
                         (int) page.getTotalElements()
                 ));
     }
+
     private Specification<FunkoPop> constructSpecification(FunkoSearchCriteria searchCriteria) {
         return (root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -72,10 +74,20 @@ public class FunkoPopService {
             if (searchCriteria.getCategory() != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("category")), "%" + searchCriteria.getCategory().toLowerCase() + "%"));
             }
-
+            if (searchCriteria.getInStock() != null) {
+                if (searchCriteria.getInStock().equals(true)) {
+                    predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("amount"), 1));
+                } else {
+                    predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("amount"), 0));
+                }
+            }
+            if (searchCriteria.getSale() != null) {
+                predicates.add(criteriaBuilder.isTrue(root.get("sale")));
+            }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
+
     private Sort getSort(OrderBy orderBy) {
         if (orderBy == null) {
             return Sort.unsorted();

@@ -14,4 +14,6 @@ public class FunkoSearchCriteria {
     private PriceSearch price;
     private String series;
     private String category;
+    private Boolean inStock;
+    private Boolean sale;
 }
