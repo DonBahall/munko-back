@@ -12,6 +12,7 @@ import lombok.Setter;
 public class FunkoSearchCriteria {
     private String name;
     private PriceSearch price;
+    private String collection;
     private String series;
     private String category;
     private Boolean inStock;

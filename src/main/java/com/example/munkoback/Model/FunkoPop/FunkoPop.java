@@ -26,7 +26,7 @@ public class FunkoPop {
     private Integer amount;
     private String description;
     private Boolean sale;
-    private String license;
+    private String collection;
     private String sublicense;
     private String series;
     private String category;

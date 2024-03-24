@@ -1,5 +1,5 @@
 package com.example.munkoback.Resolver;
-import com.example.munkoback.Model.User;
+import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Request.AuthenticationRequest;
 import com.example.munkoback.Service.AuthenticationService;
 

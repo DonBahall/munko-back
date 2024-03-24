@@ -68,6 +68,9 @@ public class FunkoPopService {
                     predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceRange.getTo()));
                 }
             }
+            if (searchCriteria.getName() != null) {
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("collection")), "%" + searchCriteria.getName().toLowerCase() + "%"));
+            }
             if (searchCriteria.getSeries() != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("series")), "%" + searchCriteria.getSeries().toLowerCase() + "%"));
             }
@@ -105,6 +108,8 @@ public class FunkoPopService {
             case CategoryDesc -> Sort.by("category").descending();
             case SeriesAsk -> Sort.by("series").ascending();
             case SeriesDesc -> Sort.by("series").descending();
+            case CollectionAsk -> Sort.by("collection").ascending();
+            case CollectionDesc -> Sort.by("collection").descending();
             default -> Sort.unsorted();
         };
     }

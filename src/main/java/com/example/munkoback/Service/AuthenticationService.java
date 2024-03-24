@@ -1,7 +1,7 @@
 package com.example.munkoback.Service;
 
-import com.example.munkoback.Model.Role;
-import com.example.munkoback.Model.User;
+import com.example.munkoback.Model.User.Role;
+import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.UserRepo;
 import com.example.munkoback.Request.AuthenticationRequest;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
-package com.example.munkoback.Model;
+package com.example.munkoback.Model.Token;
 
+import com.example.munkoback.Model.User.User;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import lombok.AllArgsConstructor;

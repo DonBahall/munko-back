@@ -1,28 +1,5 @@
 type Query {
     authenticate(email: String!, password: String!): String
-    getAllItems(paging: SearchPaging, orderBy: OrderBy, searchCriteria: FunkoSearchCriteria): FunkoPops!
-    getItem(id: Int!): FunkoPop
-}
-
-type FunkoPops{
-    items: [FunkoPop!]!
-    paging: Paging!
-}
-
-type FunkoPop{
-    id: Int!
-    name: String!
-    images: [String]
-    price: Int!
-    amount: Int
-    description: String
-    sale: Boolean
-    license: String
-    sublicense: String
-    series: String
-    category: String
-    productType: String
-    date: String
 }
 
 type User{
@@ -50,15 +27,6 @@ type Order{
     user: User
     funkoId: Int
     amount: Int
-}
-
-input FunkoSearchCriteria {
-    name: String
-    price: Price
-    series: String
-    category: String
-    inStock: Boolean
-    sale: Boolean
 }
 
 input UserInput{

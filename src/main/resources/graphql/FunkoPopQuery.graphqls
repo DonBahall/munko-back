@@ -1,0 +1,34 @@
+extend type Query {
+    getAllItems(paging: SearchPaging, orderBy: OrderBy, searchCriteria: FunkoSearchCriteria): FunkoPops!
+    getItem(id: Int!): FunkoPop
+}
+type FunkoPops{
+    items: [FunkoPop!]!
+    paging: Paging!
+}
+
+type FunkoPop{
+    id: Int!
+    name: String!
+    images: [String]
+    price: Int!
+    amount: Int
+    description: String
+    sale: Boolean
+    collection: String
+    sublicense: String
+    series: String
+    category: String
+    productType: String
+    date: String
+}
+
+input FunkoSearchCriteria {
+    name: String
+    price: Price
+    collection: String
+    series: String
+    category: String
+    inStock: Boolean
+    sale: Boolean
+}

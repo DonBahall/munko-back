@@ -1,6 +1,7 @@
-package com.example.munkoback.Model;
+package com.example.munkoback.Model.User;
 
 
+import com.example.munkoback.Model.Order;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;

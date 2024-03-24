@@ -17,4 +17,6 @@ public enum OrderBy {
     CategoryDesc,
     SeriesAsk,
     SeriesDesc,
+    CollectionAsk,
+    CollectionDesc,
 }

@@ -1,7 +1,7 @@
 package com.example.munkoback.Service;
 
 import com.example.munkoback.Model.Review;
-import com.example.munkoback.Model.User;
+import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.ReviewRepository;
 import com.example.munkoback.Repository.UserRepo;
 import lombok.RequiredArgsConstructor;
