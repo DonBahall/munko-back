@@ -69,7 +69,7 @@ public class FunkoPopService {
                 }
             }
             if (searchCriteria.getCollection() != null) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("collection")), "%" + searchCriteria.getName().toLowerCase() + "%"));
+                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("collection")), "%" + searchCriteria.getCollection().toLowerCase() + "%"));
             }
             if (searchCriteria.getSeries() != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("series")), "%" + searchCriteria.getSeries().toLowerCase() + "%"));
