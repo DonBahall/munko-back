@@ -68,7 +68,7 @@ public class FunkoPopService {
                     predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceRange.getTo()));
                 }
             }
-            if (searchCriteria.getName() != null) {
+            if (searchCriteria.getCollection() != null) {
                 predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("collection")), "%" + searchCriteria.getName().toLowerCase() + "%"));
             }
             if (searchCriteria.getSeries() != null) {

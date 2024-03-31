@@ -11,8 +11,8 @@ type Paging {
 }
 
 input Price {
-    from: Int!
-    to: Int!
+    from: Int
+    to: Int
 }
 
 enum OrderBy {
