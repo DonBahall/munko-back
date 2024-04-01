@@ -8,6 +8,7 @@ import com.example.munkoback.Model.Paging_Sorting.OrderBy;
 import com.example.munkoback.Model.Paging_Sorting.Paging;
 import com.example.munkoback.Model.Paging_Sorting.SearchPaging;
 import com.example.munkoback.Repository.FunkoPopRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -68,15 +69,30 @@ public class FunkoPopService {
                     predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("price"), priceRange.getTo()));
                 }
             }
-            if (searchCriteria.getCollection() != null) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("collection")), "%" + searchCriteria.getCollection().toLowerCase() + "%"));
+            if (searchCriteria.getCollection() != null && !searchCriteria.getCollection().isEmpty()) {
+                CriteriaBuilder.In<String> inClause = criteriaBuilder.in(root.get("collection"));
+                for (String collection : searchCriteria.getCollection()) {
+                    inClause.value(collection.toLowerCase());
+                }
+                predicates.add(inClause);
             }
-            if (searchCriteria.getSeries() != null) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("series")), "%" + searchCriteria.getSeries().toLowerCase() + "%"));
+
+            if (searchCriteria.getSeries() != null && !searchCriteria.getSeries().isEmpty()) {
+                CriteriaBuilder.In<String> seriesInClause = criteriaBuilder.in(root.get("series"));
+                for (String series : searchCriteria.getSeries()) {
+                    seriesInClause.value(series.toLowerCase());
+                }
+                predicates.add(seriesInClause);
             }
-            if (searchCriteria.getCategory() != null) {
-                predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get("category")), "%" + searchCriteria.getCategory().toLowerCase() + "%"));
+
+            if (searchCriteria.getCategory() != null && !searchCriteria.getCategory().isEmpty()) {
+                CriteriaBuilder.In<String> categoryInClause = criteriaBuilder.in(root.get("category"));
+                for (String category : searchCriteria.getCategory()) {
+                    categoryInClause.value(category.toLowerCase());
+                }
+                predicates.add(categoryInClause);
             }
+
             if (searchCriteria.getInStock() != null) {
                 if (searchCriteria.getInStock().equals(true)) {
                     predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("amount"), 1));

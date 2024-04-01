@@ -26,9 +26,9 @@ type FunkoPop{
 input FunkoSearchCriteria {
     name: String
     price: Price
-    collection: String
-    series: String
-    category: String
+    collection: [String]
+    series: [String]
+    category: [String]
     inStock: Boolean
     sale: Boolean
 }
