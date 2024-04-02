@@ -9,6 +9,7 @@ import com.example.munkoback.Model.Paging_Sorting.Paging;
 import com.example.munkoback.Model.Paging_Sorting.SearchPaging;
 import com.example.munkoback.Repository.FunkoPopRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Expression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -101,8 +102,10 @@ public class FunkoPopService {
                 }
             }
             if (searchCriteria.getSale() != null) {
-                predicates.add(criteriaBuilder.isTrue(root.get("sale")));
+                Expression<Boolean> saleExpression = root.get("sale");
+                predicates.add(criteriaBuilder.equal(saleExpression, searchCriteria.getSale()));
             }
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
