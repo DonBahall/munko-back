@@ -1,10 +1,17 @@
 extend type Query {
     getAllItems(paging: SearchPaging, orderBy: OrderBy, searchCriteria: FunkoSearchCriteria): FunkoPops!
     getItem(id: Int!): FunkoPop
+    getAllAttributes: AttributeCollection
 }
 type FunkoPops{
     items: [FunkoPop!]!
     paging: Paging!
+}
+
+type AttributeCollection {
+    categories: [String]
+    collections: [String]
+    series: [String]
 }
 
 type FunkoPop{

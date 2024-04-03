@@ -10,6 +10,7 @@ import com.example.munkoback.Model.Paging_Sorting.SearchPaging;
 import com.example.munkoback.Repository.FunkoPopRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
+import lombok.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.criteria.Predicate;
 
@@ -136,4 +139,40 @@ public class FunkoPopService {
     public FunkoPop getItem(Integer id) {
         return repository.findById(id).orElse(null);
     }
+    public AttributeCollection getAllAttributes() {
+        List<FunkoPop> popList = repository.findAll();
+        return convertToAttributeCollection(popList);
+    }
+
+    private AttributeCollection convertToAttributeCollection(List<FunkoPop> popList) {
+        AttributeCollection attributeCollection = new AttributeCollection();
+
+        Set<String> categories = new HashSet<>();
+        Set<String> collections = new HashSet<>();
+        Set<String> series = new HashSet<>();
+
+        for (FunkoPop pop : popList) {
+            categories.add(pop.getCategory());
+            collections.add(pop.getCollection());
+            series.add(pop.getSeries());
+        }
+
+        attributeCollection.setCategories(new ArrayList<>(categories));
+        attributeCollection.setCollections(new ArrayList<>(collections));
+        attributeCollection.setSeries(new ArrayList<>(series));
+
+        return attributeCollection;
+    }
+
+   @Setter
+   @Getter
+   @AllArgsConstructor
+   @NoArgsConstructor
+   public static class AttributeCollection {
+        private List<String> categories;
+        private List<String> collections;
+        private List<String> series;
+
+    }
+
 }

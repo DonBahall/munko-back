@@ -13,6 +13,9 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.List;
+import java.util.Set;
+
 
 @Controller
 @CrossOrigin(origins = {"http://localhost:3000", "https://munko-front.vercel.app"})
@@ -31,4 +34,11 @@ public class FunkoQueryResolver {
     public FunkoPop getItem(@Argument Integer id){
         return service.getItem(id);
     }
+    @QueryMapping
+    public FunkoPopService.AttributeCollection getAllAttributes(){
+        return service.getAllAttributes();
+    }
+
+
+
 }
