@@ -1,5 +1,6 @@
 package com.example.munkoback.Service;
 
+import com.example.munkoback.Model.Order.Order;
 import com.example.munkoback.Model.User.Role;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.UserRepo;
@@ -12,9 +13,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-public class AuthenticationService {
+public class UserService {
 
     private final UserRepo repository;
     private final JwtService jwtService;
@@ -44,14 +47,15 @@ public class AuthenticationService {
 
         return repository.save(request);
     }
+
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
-    public User updateUser(User request){
+    public User updateUser(User request) {
         User user = getAutentificatedUser();
-        if(request.getId() == null || !user.getId().equals(request.getId())) {
-           return null;
+        if (request.getId() == null || !user.getId().equals(request.getId())) {
+            return null;
         }
         User existing = repository.findById(request.getId()).orElse(null);
-        if(existing == null){
+        if (existing == null) {
             return null;
         }
         existing.setFirstName(request.getFirstName());
@@ -68,10 +72,23 @@ public class AuthenticationService {
         existing.setRole(request.getRole());
         existing.setFavorite(request.getFavorite());
 
-       return repository.save(existing);
+        return repository.save(existing);
     }
 
     public User getAutentificatedUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public User findById(Integer id) {
+        return repository.findById(id).orElse(null);
+    }
+
+
+    public List<Order> getUserOrders(Integer userId) {
+        User user = repository.findById(userId).orElse(null);
+        if (user != null) {
+            return user.getOrders();
+        }
+        return null;
     }
 }

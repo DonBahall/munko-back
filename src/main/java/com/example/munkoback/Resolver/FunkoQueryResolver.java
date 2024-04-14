@@ -7,24 +7,18 @@ import com.example.munkoback.Model.Paging_Sorting.OrderBy;
 import com.example.munkoback.Model.Paging_Sorting.SearchPaging;
 import com.example.munkoback.Service.FunkoPopService;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import java.util.List;
-import java.util.Set;
-
 
 @Controller
 @CrossOrigin(origins = {"http://localhost:3000", "https://munko-front.vercel.app"})
+@RequiredArgsConstructor
 public class FunkoQueryResolver {
     private final FunkoPopService service;
-    @Autowired
-    public FunkoQueryResolver(FunkoPopService service) {
-        this.service = service;
-    }
     @QueryMapping
     public FunkoPops getAllItems(@Argument SearchPaging paging,@Argument OrderBy orderBy,@Argument FunkoSearchCriteria searchCriteria ){
         return service.getAllItems(paging, orderBy, searchCriteria);

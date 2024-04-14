@@ -26,12 +26,9 @@ import java.util.Set;
 import jakarta.persistence.criteria.Predicate;
 
 @Service
+@RequiredArgsConstructor
 public class FunkoPopService {
     private final FunkoPopRepository repository;
-
-    public FunkoPopService(FunkoPopRepository repository) {
-        this.repository = repository;
-    }
 
     public FunkoPops getAllItems(SearchPaging paging, OrderBy orderBy, FunkoSearchCriteria searchCriteria) {
         Sort sort = getSort(orderBy);

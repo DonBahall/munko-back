@@ -1,4 +1,4 @@
-package com.example.munkoback.Service;
+package com.example.munkoback.Config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -10,7 +10,7 @@ import org.springframework.http.HttpMethod;
 
 @Configuration
 @EnableScheduling
-public class WakeUpService {
+public class WakeUpServiceConfig {
 
     @Scheduled(fixedRate = 300000) // 5 min
     public void keepAlive() {

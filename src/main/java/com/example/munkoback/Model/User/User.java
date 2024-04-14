@@ -1,7 +1,7 @@
 package com.example.munkoback.Model.User;
 
 
-import com.example.munkoback.Model.Order;
+import com.example.munkoback.Model.Order.Order;
 import jakarta.persistence.*;
 
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class User implements UserDetails {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
     private List<Order> orders;
 
     @Enumerated(EnumType.STRING)

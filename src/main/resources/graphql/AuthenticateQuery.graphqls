@@ -22,13 +22,6 @@ type Address{
     postOffice:String
 }
 
-type Order{
-    id: Int!
-    user: User
-    funkoId: Int
-    amount: Int
-}
-
 input UserInput{
     id: Int
     firstName:String!
@@ -41,12 +34,6 @@ input UserInput{
     role: String
 }
 
-input OrderInput{
-    id: Int
-    user: UserInput
-    funkoId: Int
-    amount: Int
-}
 
 input AddressInput{
     id: Int
