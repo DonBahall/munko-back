@@ -1,0 +1,30 @@
+extend type Mutation {
+    createOrder(sessionID: String, userId: Int, entity: OrderInfoRequest!): Order
+}
+
+input OrderInfoRequest{
+    funkoId: Int!
+    amount: Int!
+}
+
+input OrderInput{
+    id: Int
+    userId: UserInput
+    sessionID: String
+    orderItems: [OrderItemInput]
+    status: Status
+}
+
+input OrderItemInput{
+    id: Int
+    order_id: Int
+    funkoId: Int
+    amount: Int
+    pricePerItem: Int
+}
+
+enum Status{
+    PENDING
+    PAID
+    FINISHED
+}

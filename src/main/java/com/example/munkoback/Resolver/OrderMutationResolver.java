@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public class OrderResolver {
+public class OrderMutationResolver {
     private final OrderService orderService;
     @MutationMapping
     public Order createOrder(@Argument String sessionID, @Argument Integer userId, @Argument OrderInfoRequest entity) {

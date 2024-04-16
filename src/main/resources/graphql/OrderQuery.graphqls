@@ -1,33 +1,12 @@
-extend type Mutation {
-    createOrder(sessionID: String, userId: Int, entity: OrderInfoRequest!): Order
-}
-
-input OrderInfoRequest{
-    funkoId: Int!
-    amount: Int!
-}
-
-input OrderInput{
-    id: Int
-    userId: UserInput
-    sessionID: String
-    orderItems: [OrderItemInput]
-    status: Status
+extend type Query {
+    getOrderItems(sessionID: String, userId: Int): [OrderItem]
+    deleteItemInBasket(sessionID: String, userId: Int, itemId: Int): Boolean
+    updateItemInBasket(sessionID: String, userId: Int, newItem: OrderItemInput): OrderItem
 }
 
 type OrderItem{
-     id: Int
-     orderId: Int
-     funkoId: Int
-     amount: Int
-     pricePerItem: Int
-}
-
-
-
-input OrderItemInput{
     id: Int
-    orderId: Int
+    order: Order
     funkoId: Int
     amount: Int
     pricePerItem: Int
@@ -39,10 +18,4 @@ type Order{
     sessionID: String
     orderItems: [OrderItem]
     status: Status
-}
-
-enum Status{
-    PENDING
-    PAID
-    FINISHED
 }
