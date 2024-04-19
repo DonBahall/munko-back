@@ -83,7 +83,6 @@ public class UserService {
         return repository.findById(id).orElse(null);
     }
 
-
     public List<Order> getUserOrders(Integer userId) {
         User user = repository.findById(userId).orElse(null);
         if (user != null) {

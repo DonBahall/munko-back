@@ -5,9 +5,10 @@ type Mutation{
 }
 
 input ReviewInput{
-    id: Int!
+    id: Int
     userId: Int!
     funkoId: Int!
     review: String!
     star: Int!
+    username: String!
 }
