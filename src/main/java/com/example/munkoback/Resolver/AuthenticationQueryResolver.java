@@ -1,6 +1,7 @@
 package com.example.munkoback.Resolver;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Request.AuthenticationRequest;
+import com.example.munkoback.Request.UserRequest;
 import com.example.munkoback.Service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -15,12 +16,8 @@ public class AuthenticationQueryResolver {
 
     private final UserService service;
     @QueryMapping
-    public String authenticate(@Argument String email,@Argument String password) {
+    public UserRequest authenticate(@Argument String email, @Argument String password) {
         return service.authenticate(new AuthenticationRequest(email, password));
-    }
-    @QueryMapping
-    public User getAutentificatedUser(){
-        return service.getAutentificatedUser();
     }
     @MutationMapping
     public User registration(@Argument User user){

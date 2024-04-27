@@ -5,6 +5,7 @@ import com.example.munkoback.Model.User.Role;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.UserRepo;
 import com.example.munkoback.Request.AuthenticationRequest;
+import com.example.munkoback.Request.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,7 +25,7 @@ public class UserService {
     private final AuthenticationManager authenticationManager;
 
 
-    public String authenticate(AuthenticationRequest request) {
+    public UserRequest authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -33,7 +34,7 @@ public class UserService {
         );
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
-        return jwtService.generateToken(user);
+        return new UserRequest(getAutentificatedUser(), jwtService.generateToken(user));
     }
 
     public User registerUser(User request) {

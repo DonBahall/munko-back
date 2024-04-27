@@ -56,8 +56,13 @@ public class OrderService {
         }
         return false;
     }
-    public List<OrderItem> getOrderItems(String sessionID, Integer userId){
-       return getUserOrder(sessionID,userId).getOrderItems();
+
+    public List<OrderItem> getOrderItems(String sessionID, Integer userId) {
+        Order order = getUserOrder(sessionID, userId);
+        if (order == null) {
+            return null;
+        }
+        return order.getOrderItems();
     }
 
     public Order getUserOrder(String sessionID, Integer userId) {
@@ -73,12 +78,13 @@ public class OrderService {
             return null;
         }
     }
+
     public OrderItem updateItemInBasket(String sessionID, Integer userId, OrderItem newItem) {
         Order order = getUserOrder(sessionID, userId);
-        if (newItem == null ) {
+        if (newItem == null) {
             return null;
         }
-        OrderItem existing = orderItemRepository.findByOrderAndId(order,newItem.getId()).orElse(null);
+        OrderItem existing = orderItemRepository.findByOrderAndId(order, newItem.getId()).orElse(null);
 
         if (existing == null) {
             return null;

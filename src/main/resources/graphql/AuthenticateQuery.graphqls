@@ -1,6 +1,10 @@
 type Query {
-    authenticate(email: String!, password: String!): String
-    getAutentificatedUser: User!
+    authenticate(email: String!, password: String!): UserRequest
+}
+
+type UserRequest{
+    user: User
+    token: String
 }
 
 type User{
