@@ -75,6 +75,7 @@ public class UserService {
         return repository.save(existing);
     }
 
+    @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public User getAutentificatedUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }

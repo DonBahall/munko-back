@@ -1,5 +1,6 @@
 type Query {
     authenticate(email: String!, password: String!): String
+    getAutentificatedUser: User!
 }
 
 type User{
@@ -10,9 +11,7 @@ type User{
     phone: String
     password: String!
     address: Address
-    orders: [Order]
     role: String
-    favorite: [Int]
 }
 
 type Address{
