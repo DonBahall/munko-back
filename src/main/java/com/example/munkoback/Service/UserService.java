@@ -32,9 +32,12 @@ public class UserService {
                         request.getPassword()
                 )
         );
-        var user = repository.findByEmail(request.getEmail())
-                .orElseThrow();
-        return new UserRequest(getAutentificatedUser(), jwtService.generateToken(user));
+        User user = repository.findByEmail(request.getEmail())
+                .orElse(null);
+        if (user != null) {
+            return new UserRequest(user, jwtService.generateToken(user));
+        }
+        return null;
     }
 
     public User registerUser(User request) {
