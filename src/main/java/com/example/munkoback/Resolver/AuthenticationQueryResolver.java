@@ -19,6 +19,10 @@ public class AuthenticationQueryResolver {
     public UserRequest authenticate(@Argument String email, @Argument String password) {
         return service.authenticate(new AuthenticationRequest(email, password));
     }
+    @QueryMapping
+    public User getCurrentUser(){
+        return service.getAutentificatedUser();
+    }
     @MutationMapping
     public User registration(@Argument User user){
         return service.registerUser(user);
