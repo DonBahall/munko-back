@@ -1,10 +1,5 @@
 extend type Mutation {
-    createOrder(sessionID: String, userId: Int, entity: OrderInfoRequest!): Order
-}
-
-input OrderInfoRequest{
-    funkoId: Int!
-    amount: Int!
+    createOrder(sessionID: String, userId: Int, funkoId: Int!): Order
 }
 
 input OrderInput{
@@ -17,10 +12,11 @@ input OrderInput{
 
 input OrderItemInput{
     id: Int
-    order_id: Int
-    funkoId: Int
+    img: String
+    name: String
     amount: Int
     pricePerItem: Int
+    order_id: Int
 }
 
 enum Status{

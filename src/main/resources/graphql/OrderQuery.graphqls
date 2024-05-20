@@ -6,8 +6,8 @@ extend type Query {
 
 type OrderItem{
     id: Int
-    order: Order
-    funkoId: Int
+    img: String
+    name: String
     amount: Int
     pricePerItem: Int
 }

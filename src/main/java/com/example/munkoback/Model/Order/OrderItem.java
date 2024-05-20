@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderItem {
-    public OrderItem(Order order, Integer funkoId, Integer amount, Integer pricePerItem) {
+
+    public OrderItem(Order order, String img, String name, Integer amount, Integer pricePerItem) {
         this.order = order;
-        this.funkoId = funkoId;
+        this.img = img;
+        this.name = name;
         this.amount = amount;
         this.pricePerItem = pricePerItem;
     }
@@ -23,8 +25,8 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-
-    private Integer funkoId;
+    private String img;
+    private String name;
     private Integer amount;
     private Integer pricePerItem;
 

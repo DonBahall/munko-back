@@ -1,12 +1,12 @@
 package com.example.munkoback.Service;
 
+import com.example.munkoback.Model.FunkoPop.FunkoPop;
 import com.example.munkoback.Model.Order.Order;
 import com.example.munkoback.Model.Order.OrderItem;
 import com.example.munkoback.Model.Order.Status;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.OrderItemRepository;
 import com.example.munkoback.Repository.OrderRepository;
-import com.example.munkoback.Request.OrderInfoRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class OrderService {
     private final FunkoPopService funkoPopService;
     private final OrderItemRepository orderItemRepository;
 
-    public Order saveOrder(String sessionID, Integer userId, OrderInfoRequest entity) {
+    public Order saveOrder(String sessionID, Integer userId, Integer funkoId) {
         Order order = getUserOrder(sessionID, userId);
         if (order == null) {
             order = new Order();
@@ -35,7 +35,9 @@ public class OrderService {
             order.setStatus(Status.PENDING);
         }
 
-        OrderItem item = new OrderItem(order, entity.funkoId, entity.amount, funkoPopService.getItem(entity.funkoId).getPrice());
+        FunkoPop funkoPop = funkoPopService.getItem(funkoId);
+
+        OrderItem item = new OrderItem(order, funkoPop.getImages().get(0), funkoPop.getName(), funkoPop.getAmount(), funkoPop.getPrice());
         order.getOrderItems().add(item);
         repository.save(order);
         return order;
