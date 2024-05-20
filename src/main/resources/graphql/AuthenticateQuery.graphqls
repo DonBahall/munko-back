@@ -9,6 +9,7 @@ type UserRequest{
 }
 
 type UserDto{
+    id: Int!
     firstName: String!
     lastName: String
     email: String!
