@@ -64,12 +64,13 @@ public class UserService extends DefaultOAuth2UserService {
 
         return request;
     }
-    public UserRequest googleRegistration(String idToken){
+
+    public UserRequest googleAuth(String idToken, String providerAccountId) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("id_token", idToken);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
@@ -82,10 +83,17 @@ public class UserService extends DefaultOAuth2UserService {
             String name = jsonObject.getString("name");
             String email = jsonObject.getString("email");
 
-            User user = new User();
-            user.setFirstName(name);
-            user.setEmail(email);
-            repository.save(user);
+            User user = repository.findByGoogleAccountId(providerAccountId).orElse(null);
+            if (user == null) {
+                user = repository.findByEmail(email).orElse(null);
+                if (user == null) {
+                    user = new User();
+                    user.setFirstName(name);
+                    user.setEmail(email);
+                }
+                user.setGoogleAccountId(providerAccountId);
+                repository.save(user);
+            }
 
             return new UserRequest(user, jwtService.generateToken(user));
         } else {

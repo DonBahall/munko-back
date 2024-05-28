@@ -30,8 +30,8 @@ public class AuthenticationQueryResolver {
         return service.registerUser(user);
     }
     @MutationMapping
-    public UserRequest googleRegistration(@Argument String idToken){
-        return service.googleRegistration(idToken);
+    public UserRequest googleAuth(@Argument String idToken, @Argument String providerAccountId){
+        return service.googleAuth(idToken, providerAccountId);
     }
     @MutationMapping
     public User updateUser(@Argument User user){

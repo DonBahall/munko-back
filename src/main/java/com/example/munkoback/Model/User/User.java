@@ -44,6 +44,7 @@ public class User implements UserDetails {
 
     @ElementCollection
     private List<Integer> favorite;
+    private String googleAccountId;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
