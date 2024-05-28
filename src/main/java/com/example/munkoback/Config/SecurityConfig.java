@@ -48,9 +48,12 @@ public class SecurityConfig  {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .oauth2ResourceServer().jwt()
+                .and()
+                .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-
+                .oauth2Login();
         ;
         return http.build();
     }

@@ -6,24 +6,36 @@ import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.UserRepo;
 import com.example.munkoback.Request.AuthenticationRequest;
 import com.example.munkoback.Request.UserRequest;
+
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
+
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService extends DefaultOAuth2UserService {
 
     private final UserRepo repository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-
+    @Value("${GOOGLE_TOKENINFO_URL}")
+    private String GOOGLE_TOKENINFO_URL;
 
     public UserRequest authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -48,8 +60,37 @@ public class UserService {
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
         request.setRole(Role.USER);
+        repository.save(request);
 
-        return repository.save(request);
+        return request;
+    }
+    public UserRequest googleRegistration(String idToken){
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        MultiValueMap<String, String> map= new LinkedMultiValueMap<>();
+        map.add("id_token", idToken);
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
+
+        ResponseEntity<String> response = restTemplate.postForEntity(GOOGLE_TOKENINFO_URL, request, String.class);
+
+        if (response.getStatusCode() == HttpStatus.OK) {
+
+            JSONObject jsonObject = new JSONObject(response.getBody());
+            String name = jsonObject.getString("name");
+            String email = jsonObject.getString("email");
+
+            User user = new User();
+            user.setFirstName(name);
+            user.setEmail(email);
+            repository.save(user);
+
+            return new UserRequest(user, jwtService.generateToken(user));
+        } else {
+            return null;
+        }
     }
 
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")

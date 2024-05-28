@@ -10,6 +10,7 @@ import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
+
 @Controller
 @RequiredArgsConstructor
 public class AuthenticationQueryResolver {
@@ -23,9 +24,14 @@ public class AuthenticationQueryResolver {
     public User getCurrentUser(){
         return service.getAutentificatedUser();
     }
+
     @MutationMapping
     public User registration(@Argument User user){
         return service.registerUser(user);
+    }
+    @MutationMapping
+    public UserRequest googleRegistration(@Argument String idToken){
+        return service.googleRegistration(idToken);
     }
     @MutationMapping
     public User updateUser(@Argument User user){

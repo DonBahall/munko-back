@@ -23,7 +23,7 @@ type User{
     lastName: String
     email: String!
     phone: String
-    password: String!
+    password: String
     address: Address
     role: String
 }

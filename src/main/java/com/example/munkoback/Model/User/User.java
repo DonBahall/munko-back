@@ -19,6 +19,11 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 public class User implements UserDetails {
+    public User(String firstName, String email) {
+        this.firstName = firstName;
+        this.email = email;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
