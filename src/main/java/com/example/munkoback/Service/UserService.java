@@ -1,6 +1,7 @@
 package com.example.munkoback.Service;
 
 import com.example.munkoback.Model.Order.Order;
+
 import com.example.munkoback.Model.User.Role;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.UserRepo;
@@ -25,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +54,11 @@ public class UserService extends DefaultOAuth2UserService {
 
     public User registerUser(User request) {
         if (repository.existsByEmail(request.getEmail())) {
-            return request;
+            return null;
+        }
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        if (!request.getEmail().matches(emailRegex) || request.getFirstName().equals("")) {
+            return null;
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
