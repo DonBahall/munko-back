@@ -94,6 +94,7 @@ public class UserService extends DefaultOAuth2UserService {
                     user = new User();
                     user.setFirstName(name);
                     user.setEmail(email);
+                    user.setRole(Role.USER);
                 }
                 user.setGoogleAccountId(providerAccountId);
                 repository.save(user);
