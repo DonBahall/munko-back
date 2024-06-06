@@ -1,6 +1,7 @@
 type Query {
     authenticate(email: String!, password: String!): UserRequest
     getCurrentUser: UserDto
+    getUserOrders(userId: Int!): [Order]
 }
 
 type UserRequest{

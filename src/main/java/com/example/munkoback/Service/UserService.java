@@ -1,5 +1,6 @@
 package com.example.munkoback.Service;
 
+import com.example.munkoback.Model.InvalidArgumentsException;
 import com.example.munkoback.Model.Order.Order;
 
 import com.example.munkoback.Model.User.Role;
@@ -54,11 +55,11 @@ public class UserService extends DefaultOAuth2UserService {
 
     public User registerUser(User request) {
         if (repository.existsByEmail(request.getEmail())) {
-            return null;
+            throw new InvalidArgumentsException("This email already existing");
         }
         String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
         if (!request.getEmail().matches(emailRegex) || request.getFirstName().equals("")) {
-            return null;
+            throw new InvalidArgumentsException("Arguments in wrong format!");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
@@ -102,7 +103,7 @@ public class UserService extends DefaultOAuth2UserService {
 
             return new UserRequest(user, jwtService.generateToken(user));
         } else {
-            return null;
+            throw new InvalidArgumentsException("Invalid arguments");
         }
     }
 
@@ -110,11 +111,11 @@ public class UserService extends DefaultOAuth2UserService {
     public User updateUser(User request) {
         User user = getAutentificatedUser();
         if (request.getId() == null || !user.getId().equals(request.getId())) {
-            return null;
+            throw new InvalidArgumentsException("Wrong Arguments");
         }
         User existing = repository.findById(request.getId()).orElse(null);
         if (existing == null) {
-            return null;
+            throw new InvalidArgumentsException("User does not exist");
         }
         existing.setFirstName(request.getFirstName());
         existing.setLastName(request.getLastName());
@@ -147,6 +148,6 @@ public class UserService extends DefaultOAuth2UserService {
         if (user != null) {
             return user.getOrders();
         }
-        return null;
+        throw new InvalidArgumentsException("User not found");
     }
 }
