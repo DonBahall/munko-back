@@ -3,6 +3,7 @@ extend type Query {
     getItem(id: Int!): FunkoPop
     getAllAttributes: AttributeCollection
 }
+
 type FunkoPops{
     items: [FunkoPop!]!
     paging: Paging!
@@ -14,8 +15,24 @@ type AttributeCollection {
     series: [String]
 }
 
-type FunkoPop{
+type FunkoPop {
     id: Int!
+    name: String!
+    images: [String]
+    price: Int!
+    amount: Int
+    description: String
+    sale: Boolean
+    collection: String
+    sublicense: String
+    series: String
+    category: String
+    productType: String
+    date: String
+}
+
+input FunkoPopInput {
+    id: Int
     name: String!
     images: [String]
     price: Int!

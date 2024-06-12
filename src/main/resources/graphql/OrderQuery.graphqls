@@ -1,21 +1,15 @@
 extend type Query {
-    getOrderItems(sessionID: String, userId: Int): [OrderItem]
-    deleteItemInBasket(sessionID: String, userId: Int, itemId: Int): Boolean
-    updateItemInBasket(sessionID: String, userId: Int, newItem: OrderItemInput): OrderItem
+    getOrderItems(userId: Int): [OrderItem]
 }
 
-type OrderItem{
+type OrderItem {
     id: Int
-    img: String
-    name: String
     amount: Int
-    pricePerItem: Int
+    funkoPop: FunkoPop
 }
 
 type Order{
     id: Int!
-    userId: User
-    sessionID: String
     orderItems: [OrderItem]
     status: Status
 }

@@ -23,36 +23,58 @@ public class OrderService {
     private final FunkoPopService funkoPopService;
     private final OrderItemRepository orderItemRepository;
 
-    public Order saveOrder(String sessionID, Integer userId, Integer funkoId) {
-        Order order = getUserOrder(sessionID, userId);
+    public OrderItem addItemInBasket(Integer userId, Integer funkoId) {
+        if (userId == null) {
+            throw new InvalidArgumentsException("User id required");
+        }
+        Order order = getUserOrder(userId);
         if (order == null) {
-            order = new Order();
-            if (sessionID == null) {
-                order.setUserId(userService.findById(userId));
-            } else if(userId == null ){
-                order.setSessionID(sessionID);
-            }else {
-                throw new InvalidArgumentsException("User id or session id required");
-            }
-            order.setOrderItems(new ArrayList<>());
-            order.setStatus(Status.PENDING);
+            order = createNewOrder(userId);
         }
 
         FunkoPop funkoPop = funkoPopService.getItem(funkoId);
+        OrderItem existingItem = getOrderItemByFunkoId(order, funkoId);
 
-        OrderItem item = new OrderItem(order, funkoPop.getImages().get(0), funkoPop.getName(), funkoPop.getAmount(), funkoPop.getPrice());
-        order.getOrderItems().add(item);
-        repository.save(order);
+        if (existingItem != null) {
+            existingItem.setAmount(existingItem.getAmount() + 1);
+            repository.save(order);
+            return existingItem;
+        } else {
+            OrderItem newItem = new OrderItem(order, funkoPop, 1);
+            order.getOrderItems().add(newItem);
+            repository.save(order);
+            return newItem;
+        }
+
+    }
+
+    private Order createNewOrder(Integer userId) {
+        Order order = new Order();
+        order.setUserId(userService.findById(userId));
+
+        order.setOrderItems(new ArrayList<>());
+        order.setStatus(Status.PENDING);
         return order;
     }
 
-    public Boolean deleteItemInBasket(String sessionID, Integer userId, Integer itemId) {
-        Order order = getUserOrder(sessionID, userId);
+    private OrderItem getOrderItemByFunkoId(Order order, Integer funkoId) {
+        for (OrderItem item : order.getOrderItems()) {
+            if (item.getFunkoPop() != null) {
+                if (item.getFunkoPop().getId().equals(funkoId)) {
+                    return item;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Boolean deleteItemInBasket(Integer userId, Integer funkoId) {
+        Order order = getUserOrder(userId);
         if (order == null) {
             throw new InvalidArgumentsException("Order does not exist");
         }
-        if (itemId != null) {
-            order.getOrderItems().remove(orderItemRepository.findById(itemId).orElse(null));
+        if (funkoId != null) {
+            order.getOrderItems().remove(orderItemRepository.findById(funkoId).orElse(null));
             repository.save(order);
             if (order.getOrderItems() == null) {
                 repository.delete(order);
@@ -62,39 +84,39 @@ public class OrderService {
         throw new InvalidArgumentsException("Something goes wrong");
     }
 
-    public List<OrderItem> getOrderItems(String sessionID, Integer userId) {
-        Order order = getUserOrder(sessionID, userId);
+    public List<OrderItem> getOrderItems(Integer userId) {
+        Order order = getUserOrder(userId);
         if (order == null) {
             throw new InvalidArgumentsException("Order does not exist");
         }
         return order.getOrderItems();
     }
 
-    public Order getUserOrder(String sessionID, Integer userId) {
-        if (sessionID == null) {
+    public Order getUserOrder(Integer userId) {
+        if (userId != null) {
             User user = userService.getAutentificatedUser();
             if (!user.getId().equals(userId)) {
                 throw new InvalidArgumentsException("Wrong user");
             }
             return repository.findOrderByUserIdAndStatus(userService.findById(userId), Status.PENDING).orElse(null);
-        } else if (userId == null) {
-            return repository.findOrderBySessionIDAndStatus(sessionID, Status.PENDING).orElse(null);
         } else {
             throw new InvalidArgumentsException("At least one argument required");
         }
     }
 
-    public OrderItem updateItemInBasket(String sessionID, Integer userId, OrderItem newItem) {
-        Order order = getUserOrder(sessionID, userId);
-        if (newItem == null) {
+    public OrderItem updateItemInBasket(Integer userId, Integer orderItemId, Integer amount) {
+        Order order = getUserOrder(userId);
+        if (orderItemRepository.findById(orderItemId).orElse(null) == null) {
             throw new InvalidArgumentsException("Item is empty");
         }
-        OrderItem existing = orderItemRepository.findByOrderAndId(order, newItem.getId()).orElse(null);
+        OrderItem existing = orderItemRepository.findByOrderAndId(order, orderItemId).orElse(null);
         if (existing == null) {
             throw new InvalidArgumentsException("Item not found");
         }
-
-        existing.setAmount(newItem.getAmount());
+        if (amount <= 0) {
+            throw new InvalidArgumentsException("Wrong amount");
+        }
+        existing.setAmount(amount);
 
         return orderItemRepository.save(existing);
     }

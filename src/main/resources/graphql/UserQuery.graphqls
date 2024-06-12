@@ -44,7 +44,7 @@ input UserInput{
     phone:String
     password:String!
     address: AddressInput
-    orders:[OrderInput]
+    orders: [OrderItemInput]
     role: String
 }
 

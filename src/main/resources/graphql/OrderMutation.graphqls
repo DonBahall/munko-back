@@ -1,22 +1,13 @@
 extend type Mutation {
-    createOrder(sessionID: String, userId: Int, funkoId: Int!): Order
-}
-
-input OrderInput{
-    id: Int
-    userId: UserInput
-    sessionID: String
-    orderItems: [OrderItemInput]
-    status: Status
+    addItemInBasket(userId: Int, funkoId: Int!): OrderItem
+    deleteItemInBasket(userId: Int, itemId: Int): Boolean
+    updateItemInBasket(userId: Int, funkoId: Int, amount: Int): OrderItem
 }
 
 input OrderItemInput{
     id: Int
-    img: String
-    name: String
+    funkoId: Int
     amount: Int
-    pricePerItem: Int
-    order_id: Int
 }
 
 enum Status{

@@ -1,5 +1,6 @@
 package com.example.munkoback.Model.Order;
 
+import com.example.munkoback.Model.FunkoPop.FunkoPop;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,13 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OrderItem {
 
-    public OrderItem(Order order, String img, String name, Integer amount, Integer pricePerItem) {
+    public OrderItem(Order order, FunkoPop funkoPop, Integer amount) {
         this.order = order;
-        this.img = img;
-        this.name = name;
+        this.funkoPop = funkoPop;
         this.amount = amount;
-        this.pricePerItem = pricePerItem;
     }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,9 +25,9 @@ public class OrderItem {
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
-    private String img;
-    private String name;
+    @OneToOne
+    @JoinColumn(name = "funko_id")
+    private FunkoPop funkoPop;
     private Integer amount;
-    private Integer pricePerItem;
 
 }

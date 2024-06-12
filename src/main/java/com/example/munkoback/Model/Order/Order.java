@@ -20,7 +20,6 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
-    private String sessionID;
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItem> orderItems;
     private Status status;
