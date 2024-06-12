@@ -37,15 +37,12 @@ public class OrderService {
 
         if (existingItem != null) {
             existingItem.setAmount(existingItem.getAmount() + 1);
-            repository.save(order);
-            return existingItem;
         } else {
-            OrderItem newItem = new OrderItem(order, funkoPop, 1);
-            order.getOrderItems().add(newItem);
-            repository.save(order);
-            return newItem;
+            existingItem = new OrderItem(order, funkoPop, 1);
+            order.getOrderItems().add(existingItem);
         }
-
+        repository.save(order);
+        return existingItem;
     }
 
     private Order createNewOrder(Integer userId) {
