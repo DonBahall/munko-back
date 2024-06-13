@@ -118,14 +118,20 @@ public class UserService extends DefaultOAuth2UserService {
         if (existing == null) {
             throw new InvalidArgumentsException("User does not exist");
         }
-        if(existing.getFirstName() != null && !existing.getFirstName().equals("")){
+        if (existing.getFirstName() != null && !existing.getFirstName().equals("")) {
             existing.setFirstName(request.getFirstName());
+        } else {
+            throw new InvalidArgumentsException("Incorrect firstname");
         }
-        if(!existing.getLastName().equals("")) {
+        if (!existing.getLastName().equals("")) {
             existing.setLastName(request.getLastName());
+        } else {
+            throw new InvalidArgumentsException("Lastname can not be empty!");
         }
-        if(existing.getEmail() != null && existing.getEmail().matches(EMAIL_REGEX)){
+        if (existing.getEmail() != null && existing.getEmail().matches(EMAIL_REGEX)) {
             existing.setEmail(request.getEmail());
+        } else {
+            throw new InvalidArgumentsException("Incorrect email");
         }
 
         existing.setPhone(request.getPhone());
