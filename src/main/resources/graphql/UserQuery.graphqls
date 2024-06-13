@@ -27,6 +27,7 @@ type User{
     password: String
     address: Address
     role: String
+    favorite: [Int]
 }
 
 type Address{
@@ -38,14 +39,15 @@ type Address{
 
 input UserInput{
     id: Int
-    firstName:String!
+    firstName:String
     lastName:String
-    email:String!
+    email:String
     phone:String
-    password:String!
+    password:String
     address: AddressInput
     orders: [OrderItemInput]
     role: String
+    favorite: [Int]
 }
 
 

@@ -37,6 +37,8 @@ public class UserService extends DefaultOAuth2UserService {
     private final AuthenticationManager authenticationManager;
     @Value("${GOOGLE_TOKENINFO_URL}")
     private String GOOGLE_TOKENINFO_URL;
+    @Value("${EMAIL_REGEX}")
+    private String EMAIL_REGEX;
 
     public UserRequest authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -57,8 +59,7 @@ public class UserService extends DefaultOAuth2UserService {
         if (repository.existsByEmail(request.getEmail())) {
             throw new InvalidArgumentsException("This email already existing");
         }
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-        if (!request.getEmail().matches(emailRegex) || request.getFirstName().equals("")) {
+        if (!request.getEmail().matches(EMAIL_REGEX) || request.getFirstName().equals("")) {
             throw new InvalidArgumentsException("Arguments in wrong format!");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -117,18 +118,24 @@ public class UserService extends DefaultOAuth2UserService {
         if (existing == null) {
             throw new InvalidArgumentsException("User does not exist");
         }
-        existing.setFirstName(request.getFirstName());
-        existing.setLastName(request.getLastName());
-        existing.setEmail(request.getEmail());
+        if(existing.getFirstName() != null && !existing.getFirstName().equals("")){
+            existing.setFirstName(request.getFirstName());
+        }
+        if(!existing.getLastName().equals("")) {
+            existing.setLastName(request.getLastName());
+        }
+        if(existing.getEmail() != null && existing.getEmail().matches(EMAIL_REGEX)){
+            existing.setEmail(request.getEmail());
+        }
+
         existing.setPhone(request.getPhone());
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         existing.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        existing.setPassword(request.getPassword());
         existing.setAddress(request.getAddress());
         existing.setOrders(request.getOrders());
-        existing.setRole(request.getRole());
+
         existing.setFavorite(request.getFavorite());
 
         return repository.save(existing);
