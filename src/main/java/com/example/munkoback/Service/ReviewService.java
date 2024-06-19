@@ -28,7 +28,8 @@ public class ReviewService {
         if(getAllReviews().contains(repository.findByFunkoIdAndUserId(entity.getFunkoId(), entity.getUserId()))) {
             throw new InvalidArgumentsException("User already have a review");
         }
-        if(entity.getStar() < 0 || entity.getStar() > 5 ) throw new InvalidArgumentsException("Invalid arguments");;
+        if(entity.getStar() < 0 || entity.getStar() > 5 ) throw new InvalidArgumentsException("Invalid arguments");
+        if(entity.getReview().length() > 300) throw new InvalidArgumentsException("Invalid arguments");
         User user = userService.getAutentificatedUser();
         if(!Objects.equals(user.getId(), entity.getUserId())){
             entity.setUserId(user.getId());

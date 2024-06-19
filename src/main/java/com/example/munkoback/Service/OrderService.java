@@ -91,13 +91,9 @@ public class OrderService {
 
     public Order getUserOrder(Integer userId) {
         if (userId != null) {
-            User user = userService.getAutentificatedUser();
-            if (!user.getId().equals(userId)) {
-                throw new InvalidArgumentsException("Wrong user");
-            }
             return repository.findOrderByUserIdAndStatus(userService.findById(userId), Status.PENDING).orElse(null);
         } else {
-            throw new InvalidArgumentsException("At least one argument required");
+            throw new InvalidArgumentsException("Unauthorised");
         }
     }
 
@@ -113,8 +109,10 @@ public class OrderService {
         if (amount <= 0) {
             throw new InvalidArgumentsException("Wrong amount");
         }
-        existing.setAmount(amount);
-
+        if (amount <= existing.getFunkoPop().getAmount()) {
+            existing.setAmount(amount);
+        }
         return orderItemRepository.save(existing);
     }
 }
+

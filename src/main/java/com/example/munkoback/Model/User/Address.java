@@ -17,6 +17,7 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long userId;
-    private String locality;
-    private String postOffice;
+    private String addressLine1;
+    private String addressLine2;
+    private String postalCode;
 }

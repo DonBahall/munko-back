@@ -1,7 +1,8 @@
 extend type Mutation {
-    addItemInBasket(userId: Int, funkoId: Int!): OrderItem
-    deleteItemInBasket(userId: Int, itemId: Int): Boolean
-    updateItemInBasket(userId: Int, funkoId: Int, amount: Int): OrderItem
+    addItemInBasket(funkoId: Int!): OrderItem
+    deleteItemInBasket(itemId: Int): Boolean
+    updateItemInBasket(funkoId: Int, amount: Int): OrderItem
+    createOrder(prise: Int): PayPalOrder
 }
 
 input OrderItemInput{
@@ -14,4 +15,14 @@ enum Status{
     PENDING
     PAID
     FINISHED
+}
+
+type PayPalOrder{
+    id: String
+    status: String
+    links: [Links]
+}
+type Links{
+    href: String
+    rel: String
 }

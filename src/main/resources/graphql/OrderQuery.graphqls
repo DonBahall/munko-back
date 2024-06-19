@@ -1,5 +1,5 @@
 extend type Query {
-    getOrderItems(userId: Int): [OrderItem]
+    getOrderItems: [OrderItem]
 }
 
 type OrderItem {

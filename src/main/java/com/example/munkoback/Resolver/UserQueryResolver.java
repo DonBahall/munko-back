@@ -31,8 +31,8 @@ public class UserQueryResolver {
     }
 
     @QueryMapping
-    public List<Order> getUserOrders(@Argument Integer userId) {
-        return service.getUserOrders(userId);
+    public List<Order> getUserOrders() {
+        return service.getUserOrders(service.getAutentificatedUser().getId());
     }
 
 }
