@@ -31,11 +31,13 @@ type User{
 }
 
 type Address{
-    id:Int!
-    userId:Int!
-    addressLine1:String
-    addressLine2:String
-    postalCode:String
+    id: Int!
+    userId: Int!
+    addressLine1: String
+    addressLine2: String
+    postalCode: String
+    city: String
+    countryCode: String
 }
 
 input UserInput{
@@ -58,4 +60,6 @@ input AddressInput{
     addressLine1: String
     addressLine2: String
     postalCode: String
+    city: String
+    countryCode: String
 }
