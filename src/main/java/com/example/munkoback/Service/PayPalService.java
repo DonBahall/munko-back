@@ -1,5 +1,7 @@
 package com.example.munkoback.Service;
 
+import com.example.munkoback.Model.InvalidArgumentsException;
+import com.example.munkoback.Model.Order.Status;
 import com.example.munkoback.Model.User.Address;
 import com.example.munkoback.Model.User.User;
 import com.paypal.core.PayPalHttpClient;
@@ -22,6 +24,7 @@ public class PayPalService {
     @Autowired
     private PayPalHttpClient payPalHttpClient;
     private final UserService service;
+    private final OrderService orderService;
 
     public Order createOrder(Integer userId, String prise) throws IOException {
         OrderRequest orderRequest = new OrderRequest();
@@ -30,8 +33,17 @@ public class PayPalService {
         User user = service.findById(userId);
         if (user != null) {
             String referenceId = UUID.randomUUID().toString();
-            String customId = "CUST-" + UUID.randomUUID();
+            String customId = "CUST-" + user.getEmail() + "-" + UUID.randomUUID();
             Address userAddress = user.getAddress();
+
+            if (userAddress == null ||
+                    userAddress.getAddressLine1() == null ||
+                    userAddress.getAddressLine2() == null ||
+                    userAddress.getPostalCode() == null ||
+                    userAddress.getCity() == null ||
+                    userAddress.getCountryCode() == null) {
+                throw new InvalidArgumentsException("Wrong arguments!");
+            }
 
             ShippingDetail shippingDetail = new ShippingDetail()
                     .name(new Name().fullName(user.getFirstName() + " " + user.getLastName()))
@@ -39,15 +51,14 @@ public class PayPalService {
                             .addressLine1(userAddress.getAddressLine1())
                             .addressLine2(userAddress.getAddressLine2())
                             .postalCode(userAddress.getPostalCode())
-                            .adminArea1("CA")
-                            .adminArea2("San Francisco")
-                            .countryCode("US"));
+                            .adminArea2(userAddress.getCity())
+                            .countryCode(userAddress.getCountryCode()));
 
             ApplicationContext applicationContext = new ApplicationContext()
                     .brandName("Funko Market")
                     .landingPage("BILLING")
-                    .cancelUrl("https://munko-front.vercel.app")
-                    .returnUrl("https://munko-front.vercel.app")
+                    .cancelUrl("https://munko-front.vercel.app/cart")
+                    .returnUrl("https://munko-front.vercel.app/cart")
                     .userAction("PAY_NOW")
                     .shippingPreference("SET_PROVIDED_ADDRESS");
             orderRequest.applicationContext(applicationContext);
@@ -69,5 +80,27 @@ public class PayPalService {
             return response.result();
         }
         return null;
+    }
+
+    public Order captureOrder(String token, String payerId) throws IOException {
+        OrdersCaptureRequest request = new OrdersCaptureRequest(token);
+
+        OrdersGetRequest getRequest = new OrdersGetRequest(token);
+        HttpResponse<Order> getResponse = payPalHttpClient.execute(getRequest);
+        String customId = getResponse.result().purchaseUnits().get(0).customId();
+        String userEmail = customId.split("-")[1];
+        User authUser = service.getAutentificatedUser();
+        if (authUser.getEmail().equals(userEmail)) {
+            HttpResponse<Order> response = payPalHttpClient.execute(request);
+            if(response.statusCode() == 201 && payerId != null){
+                com.example.munkoback.Model.Order.Order order = orderService.findByStatus(authUser, Status.PENDING);
+                if(order != null){
+                    orderService.updateOrderStatus(order);
+                }
+            }
+            return response.result();
+        } else {
+            throw new InvalidArgumentsException("Wrong arguments!");
+        }
     }
 }

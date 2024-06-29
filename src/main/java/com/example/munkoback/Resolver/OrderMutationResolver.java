@@ -36,4 +36,8 @@ public class OrderMutationResolver {
         public Order createOrder(@Argument Integer prise) throws IOException {
         return payPalService.createOrder(userService.getAutentificatedUser().getId(), prise.toString());
     }
+    @MutationMapping
+    public Order completeOrder(@Argument String token, @Argument String payerId ) throws IOException{
+        return payPalService.captureOrder(token,payerId);
+    }
 }
