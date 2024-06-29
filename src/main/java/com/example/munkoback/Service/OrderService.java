@@ -53,9 +53,9 @@ public class OrderService {
         order.setStatus(Status.PENDING);
         return order;
     }
-    public Order updateOrderStatus(Order order){
+    public void updateOrderStatus(Order order){
         order.setStatus(Status.PAID);
-        return repository.save(order);
+        repository.save(order);
     }
     public Order findByStatus(User userId, Status status){
         return repository.findOrderByUserIdAndStatus(userId, status).orElse(null);

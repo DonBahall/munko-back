@@ -33,11 +33,11 @@ public class OrderMutationResolver {
         return orderService.updateItemInBasket(userService.getAutentificatedUser().getId(), funkoId, amount);
     }
     @MutationMapping
-        public Order createOrder(@Argument Integer prise) throws IOException {
-        return payPalService.createOrder(userService.getAutentificatedUser().getId(), prise.toString());
+        public Order createPayPalOrder(@Argument Integer prise) throws IOException {
+        return payPalService.createPayPalOrder(userService.getAutentificatedUser().getId(), prise.toString());
     }
     @MutationMapping
-    public Order completeOrder(@Argument String token, @Argument String payerId ) throws IOException{
-        return payPalService.captureOrder(token,payerId);
+    public Order completePayPalOrder(@Argument String token, @Argument String payerId ) throws IOException{
+        return payPalService.completePayPalOrder(token,payerId);
     }
 }

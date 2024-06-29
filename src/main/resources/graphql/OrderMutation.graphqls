@@ -2,8 +2,8 @@ extend type Mutation {
     addItemInBasket(funkoId: Int!): OrderItem
     deleteItemInBasket(itemId: Int): Boolean
     updateItemInBasket(funkoId: Int, amount: Int): OrderItem
-    createOrder(prise: Int): PayPalOrder
-    completeOrder(token: String, payerId: String): PayPalOrder
+    createPayPalOrder(prise: Int): PayPalOrder
+    completePayPalOrder(token: String, payerId: String): PayPalOrder
 }
 
 input OrderItemInput{

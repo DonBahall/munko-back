@@ -26,7 +26,7 @@ public class PayPalService {
     private final UserService service;
     private final OrderService orderService;
 
-    public Order createOrder(Integer userId, String prise) throws IOException {
+    public Order createPayPalOrder(Integer userId, String prise) throws IOException {
         OrderRequest orderRequest = new OrderRequest();
         orderRequest.checkoutPaymentIntent("CAPTURE");
 
@@ -82,7 +82,7 @@ public class PayPalService {
         return null;
     }
 
-    public Order captureOrder(String token, String payerId) throws IOException {
+    public Order completePayPalOrder(String token, String payerId) throws IOException {
         OrdersCaptureRequest request = new OrdersCaptureRequest(token);
 
         OrdersGetRequest getRequest = new OrdersGetRequest(token);
