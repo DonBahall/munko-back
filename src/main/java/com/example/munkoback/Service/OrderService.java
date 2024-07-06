@@ -36,7 +36,11 @@ public class OrderService {
         OrderItem existingItem = getOrderItemByFunkoId(order, funkoId);
 
         if (existingItem != null) {
-            existingItem.setAmount(existingItem.getAmount() + 1);
+            if(existingItem.getAmount() < existingItem.getFunkoPop().getAmount()){
+                existingItem.setAmount(existingItem.getAmount() + 1);
+            }else {
+                throw new InvalidArgumentsException("Dont have enough funko pop");
+            }
         } else {
             existingItem = new OrderItem(order, funkoPop, 1);
             order.getOrderItems().add(existingItem);
@@ -113,7 +117,7 @@ public class OrderService {
         if (existing == null) {
             throw new InvalidArgumentsException("Item not found");
         }
-        if (amount <= 0) {
+        if (amount <= 0 ) {
             throw new InvalidArgumentsException("Wrong amount");
         }
         if (amount <= existing.getFunkoPop().getAmount()) {
