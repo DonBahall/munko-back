@@ -26,8 +26,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.UUID;
+import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class UserService extends DefaultOAuth2UserService {
@@ -39,6 +41,54 @@ public class UserService extends DefaultOAuth2UserService {
     private String GOOGLE_TOKENINFO_URL;
     @Value("${EMAIL_REGEX}")
     private String EMAIL_REGEX;
+    private final EmailService emailService;
+    private Map<String, String> passwordResetTokens = new HashMap<>();
+
+    public String forgotPassword(String email) {
+        User user = findByEmail(email);
+
+        if (user == null) {
+            return "Email address not found.";
+        }
+
+        String token = createPasswordResetToken(user);
+        String resetLink = "https://munko-front.vercel.app/?token=" + token;
+
+        emailService.forgotPassword(email,
+                "To reset your password, click the link below:\n" + resetLink);
+
+        return "Password reset link has been sent to your email.";
+    }
+
+    public String createPasswordResetToken(User user) {
+        String token = UUID.randomUUID().toString();
+        passwordResetTokens.put(token, user.getEmail());
+        return token;
+    }
+
+    public User findByEmail(String email) {
+        return repository.findByEmail(email).orElse(null);
+    }
+
+    public boolean resetPassword(String token, String newPassword) {
+        String email = passwordResetTokens.get(token);
+
+        if (email == null) {
+            return false;
+        }
+
+        User user = findByEmail(email);
+        if (user != null) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(hashedPassword);
+            repository.save(user);
+            passwordResetTokens.remove(token);
+            return true;
+        }
+
+        return false;
+    }
 
     public UserRequest authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(

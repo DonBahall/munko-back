@@ -29,4 +29,13 @@ public class UserMutationResolver {
         return service.updateUser(user);
     }
 
+    @MutationMapping
+    public String forgotPassword(@Argument String email) {
+        return service.forgotPassword(email);
+    }
+
+    @MutationMapping
+    public Boolean resetPassword(@Argument String token, @Argument String newPassword) {
+        return service.resetPassword(token,newPassword);
+    }
 }
