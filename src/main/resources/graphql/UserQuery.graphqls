@@ -2,6 +2,7 @@ type Query {
     authenticate(email: String!, password: String!): UserRequest
     getCurrentUser: UserDto
     getUserOrders: [Order]
+    getUserFavorite: [FunkoPop]
 }
 
 type UserRequest{

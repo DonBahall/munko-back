@@ -1,5 +1,6 @@
 package com.example.munkoback.Resolver;
 
+import com.example.munkoback.Model.FunkoPop.FunkoPop;
 import com.example.munkoback.Model.Order.Order;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Request.AuthenticationRequest;
@@ -33,6 +34,11 @@ public class UserQueryResolver {
     @QueryMapping
     public List<Order> getUserOrders() {
         return service.getUserOrders(service.getAutentificatedUser().getId());
+    }
+
+    @QueryMapping
+    public List<FunkoPop> getUserFavorite() {
+        return service.getUserFavorite(service.getAutentificatedUser().getId());
     }
 
 }

@@ -50,6 +50,8 @@ public class OrderService {
     }
 
     private Order createNewOrder(Integer userId) {
+        Order existingOrder = repository.findOrderByUserIdAndStatus(userService.findById(userId),Status.PENDING).orElse(null);
+        if(existingOrder != null)  throw new InvalidArgumentsException("Already have an order");
         Order order = new Order();
         order.setUserId(userService.findById(userId));
 

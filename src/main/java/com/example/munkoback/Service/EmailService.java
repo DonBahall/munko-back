@@ -13,7 +13,7 @@ public class EmailService {
     public void forgotPassword(String to, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
-        message.setSubject("forgotPassword");
+        message.setSubject("Forgot Password");
         message.setText(text);
         emailSender.send(message);
     }

@@ -1,5 +1,6 @@
 package com.example.munkoback.Service;
 
+import com.example.munkoback.Model.FunkoPop.FunkoPop;
 import com.example.munkoback.Model.InvalidArgumentsException;
 import com.example.munkoback.Model.Order.Order;
 
@@ -36,6 +37,7 @@ public class UserService extends DefaultOAuth2UserService {
 
     private final UserRepo repository;
     private final JwtService jwtService;
+    private final FunkoPopService funkoPopService;
     private final AuthenticationManager authenticationManager;
     @Value("${GOOGLE_TOKENINFO_URL}")
     private String GOOGLE_TOKENINFO_URL;
@@ -212,5 +214,12 @@ public class UserService extends DefaultOAuth2UserService {
             return user.getOrders();
         }
         throw new InvalidArgumentsException("User not found");
+    }
+
+    public List<FunkoPop> getUserFavorite(Integer id) {
+        User user = repository.findById(id).orElse(null);
+        if (user != null) {
+            return funkoPopService.getUserFavorite(user.getFavorite());
+        }else return null;
     }
 }

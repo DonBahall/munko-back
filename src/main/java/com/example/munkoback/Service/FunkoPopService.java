@@ -7,6 +7,7 @@ import com.example.munkoback.Model.FunkoPop.PriceSearch;
 import com.example.munkoback.Model.Paging_Sorting.OrderBy;
 import com.example.munkoback.Model.Paging_Sorting.Paging;
 import com.example.munkoback.Model.Paging_Sorting.SearchPaging;
+import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Repository.FunkoPopRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Expression;
@@ -131,6 +132,9 @@ public class FunkoPopService {
             case CollectionDesc -> Sort.by("collection").descending();
             default -> Sort.unsorted();
         };
+    }
+    public List<FunkoPop> getUserFavorite(List<Integer> ids) {
+       return repository.findAllById(ids);
     }
 
     public FunkoPop getItem(Integer id) {
