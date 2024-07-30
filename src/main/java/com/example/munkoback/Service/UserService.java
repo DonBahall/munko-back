@@ -170,31 +170,34 @@ public class UserService extends DefaultOAuth2UserService {
         if (existing == null) {
             throw new InvalidArgumentsException("User does not exist");
         }
-        if (existing.getFirstName() != null) {
-            if(!existing.getFirstName().isEmpty()){
+        if (request.getFirstName() != null) {
+            if(!request.getFirstName().isEmpty()){
                 existing.setFirstName(request.getFirstName());
             }
-        } else {
-            throw new InvalidArgumentsException("Incorrect firstname");
         }
-        if (existing.getLastName() != null && !existing.getLastName().equals("")) {
+
+        if (request.getLastName() != null && !request.getLastName().isEmpty()) {
             existing.setLastName(request.getLastName());
         }
-        if (existing.getEmail() != null && existing.getEmail().matches(EMAIL_REGEX)) {
+        if (request.getEmail() != null && request.getEmail().matches(EMAIL_REGEX)) {
             existing.setEmail(request.getEmail());
-        } else {
-            throw new InvalidArgumentsException("Incorrect email");
         }
-
-        existing.setPhone(request.getPhone());
-
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        existing.setPassword(passwordEncoder.encode(request.getPassword()));
-
-        existing.setAddress(request.getAddress());
+        if (request.getPhone() != null) {
+            existing.setPhone(request.getPhone());
+        }
+        if (request.getPassword() != null) {
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            existing.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+        if(request.getAddress() !=null){
+            existing.setAddress(request.getAddress());
+        }
+        if (request.getOrders() !=null){
         existing.setOrders(request.getOrders());
-
-        existing.setFavorite(request.getFavorite());
+        }
+        if(request.getFavorite() !=null){
+            existing.setFavorite(request.getFavorite());
+        }
 
         return repository.save(existing);
     }
