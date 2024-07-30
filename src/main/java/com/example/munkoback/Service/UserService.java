@@ -177,10 +177,8 @@ public class UserService extends DefaultOAuth2UserService {
         } else {
             throw new InvalidArgumentsException("Incorrect firstname");
         }
-        if (existing.getEmail() != null && !existing.getLastName().equals("")) {
+        if (existing.getLastName() != null && !existing.getLastName().equals("")) {
             existing.setLastName(request.getLastName());
-        } else {
-            throw new InvalidArgumentsException("Lastname can not be empty!");
         }
         if (existing.getEmail() != null && existing.getEmail().matches(EMAIL_REGEX)) {
             existing.setEmail(request.getEmail());
