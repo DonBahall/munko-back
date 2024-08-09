@@ -17,4 +17,11 @@ public class EmailService {
         message.setText(text);
         emailSender.send(message);
     }
+    public void emailConfirmation(String to, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject("Email Сonfirmation");
+        message.setText(text);
+        emailSender.send(message);
+    }
 }

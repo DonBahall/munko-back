@@ -45,6 +45,7 @@ public class UserService extends DefaultOAuth2UserService {
     private String EMAIL_REGEX;
     private final EmailService emailService;
     private Map<String, String> passwordResetTokens = new HashMap<>();
+    private Map<String, String> confirmTokens = new HashMap<>();
 
     public String forgotPassword(String email) {
         User user = findByEmail(email);
@@ -80,7 +81,7 @@ public class UserService extends DefaultOAuth2UserService {
         }
 
         User user = findByEmail(email);
-        if (user != null) {
+        if (user != null && user.isEnabled()) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String hashedPassword = passwordEncoder.encode(newPassword);
             user.setPassword(hashedPassword);
@@ -105,6 +106,35 @@ public class UserService extends DefaultOAuth2UserService {
             return new UserRequest(user, jwtService.generateToken(user));
         }
         return null;
+    }
+
+    public String emailConfirmation(Integer userId){
+        User user = repository.findById(userId).orElse(null);
+        if (user == null) {
+            return null;
+        }
+        String token = UUID.randomUUID().toString();
+        confirmTokens.put(token, user.getEmail());
+
+        String confirmLink = "https://munko-front.vercel.app/?token=" + token;
+
+        emailService.emailConfirmation(user.getEmail(), "To confirm your email, click the link below:\n" + confirmLink);
+
+        return "Confirmation link has been sent to your email.";
+    }
+
+    public Boolean enableAccount(String token){
+        String email = confirmTokens.get(token);
+
+        if (email == null) {
+            return false;
+        }
+
+        User user = findByEmail(email);
+        if (user != null) {
+            user.setIsEnabled(true);
+        }
+        return false;
     }
 
     public User registerUser(User request) {

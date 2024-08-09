@@ -38,4 +38,15 @@ public class UserMutationResolver {
     public Boolean resetPassword(@Argument String token, @Argument String newPassword) {
         return service.resetPassword(token,newPassword);
     }
+
+    @MutationMapping
+    public String emailConfirmation(@Argument Integer userId) {
+        return service.emailConfirmation(userId);
+    }
+
+    @MutationMapping
+    public Boolean enableAccount(@Argument String token) {
+        return service.enableAccount(token);
+    }
+
 }
