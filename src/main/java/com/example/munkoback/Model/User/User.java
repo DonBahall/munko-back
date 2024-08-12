@@ -45,7 +45,7 @@ public class User implements UserDetails {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Integer> favorite;
     private String googleAccountId;
-    private Boolean isEnabled = false;
+    private Boolean isEnabled;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

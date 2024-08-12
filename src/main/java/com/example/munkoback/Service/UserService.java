@@ -148,6 +148,7 @@ public class UserService extends DefaultOAuth2UserService {
         String hashedPassword = passwordEncoder.encode(request.getPassword());
         request.setPassword(hashedPassword);
         request.setRole(Role.USER);
+        request.setIsEnabled(false);
         repository.save(request);
 
         return request;
