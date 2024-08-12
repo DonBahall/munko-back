@@ -133,6 +133,8 @@ public class UserService extends DefaultOAuth2UserService {
         User user = findByEmail(email);
         if (user != null) {
             user.setIsEnabled(true);
+            repository.save(user);
+            confirmTokens.remove(token);
             return true;
         }
         return false;
