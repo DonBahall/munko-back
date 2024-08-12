@@ -35,8 +35,8 @@ public class UserMutationResolver {
     }
 
     @MutationMapping
-    public Boolean resetPassword(@Argument String token, @Argument String newPassword) {
-        return service.resetPassword(token,newPassword);
+    public Boolean resetPassword(@Argument String reset_token, @Argument String newPassword) {
+        return service.resetPassword(reset_token,newPassword);
     }
 
     @MutationMapping
@@ -45,8 +45,8 @@ public class UserMutationResolver {
     }
 
     @MutationMapping
-    public Boolean enableAccount(@Argument String token) {
-        return service.enableAccount(token);
+    public Boolean enableAccount(@Argument String email_confirm_token) {
+        return service.enableAccount(email_confirm_token);
     }
 
 }
