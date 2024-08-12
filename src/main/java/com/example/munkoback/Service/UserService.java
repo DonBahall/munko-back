@@ -55,7 +55,7 @@ public class UserService extends DefaultOAuth2UserService {
         }
 
         String token = createPasswordResetToken(user);
-        String resetLink = "https://munko-front.vercel.app/?token=" + token;
+        String resetLink = "https://munko-front.vercel.app/?reset_token=" + token;
 
         emailService.forgotPassword(email,
                 "To reset your password, click the link below:\n" + resetLink);
@@ -116,7 +116,7 @@ public class UserService extends DefaultOAuth2UserService {
         String token = UUID.randomUUID().toString();
         confirmTokens.put(token, user.getEmail());
 
-        String confirmLink = "https://munko-front.vercel.app/?token=" + token;
+        String confirmLink = "https://munko-front.vercel.app/?confirm_token=" + token;
 
         emailService.emailConfirmation(user.getEmail(), "To confirm your email, click the link below:\n" + confirmLink);
 
