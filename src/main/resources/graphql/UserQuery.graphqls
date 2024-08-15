@@ -17,6 +17,7 @@ type UserDto{
     email: String!
     phone: String
     address: Address
+    password: String
 }
 
 type User{
