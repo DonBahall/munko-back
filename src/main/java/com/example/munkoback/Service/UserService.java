@@ -47,11 +47,12 @@ public class UserService extends DefaultOAuth2UserService {
     private Map<String, String> passwordResetTokens = new HashMap<>();
     private Map<String, String> confirmTokens = new HashMap<>();
 
-    public String forgotPassword(String email) {
+    public String forgotPassword(String email, String password) {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         User user = findByEmail(email);
 
-        if (user == null) {
-            return "Email address not found.";
+        if (user == null || !bCryptPasswordEncoder.matches(password, user.getPassword())) {
+            throw new InvalidArgumentsException("Invalid email or password ");
         }
 
         String token = createPasswordResetToken(user);

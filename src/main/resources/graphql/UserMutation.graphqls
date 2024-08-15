@@ -2,7 +2,7 @@ extend type Mutation {
     updateUser(user: UserInput): User
     googleAuth(idToken: String!, providerAccountId: String!): UserRequest
     registration(user: UserInput!): User
-    forgotPassword(email: String):String
+    forgotPassword(email: String, password: String):String
     resetPassword(reset_token:String, newPassword: String):Boolean
     emailConfirmation(userId: Int):String
     enableAccount(email_confirm_token:String):Boolean
