@@ -30,8 +30,13 @@ public class UserMutationResolver {
     }
 
     @MutationMapping
-    public String forgotPassword(@Argument String email, @Argument String password) {
-        return service.forgotPassword(email, password);
+    public String forgotPassword(@Argument String email) {
+        return service.forgotPassword(email);
+    }
+
+    @MutationMapping
+    public User changePassword(@Argument String oldPassword, @Argument String newPassword) {
+        return service.changePassword(oldPassword,newPassword);
     }
 
     @MutationMapping

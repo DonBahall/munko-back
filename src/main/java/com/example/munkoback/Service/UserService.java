@@ -47,11 +47,10 @@ public class UserService extends DefaultOAuth2UserService {
     private Map<String, String> passwordResetTokens = new HashMap<>();
     private Map<String, String> confirmTokens = new HashMap<>();
 
-    public String forgotPassword(String email, String password) {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+    public String forgotPassword(String email) {
         User user = findByEmail(email);
 
-        if (user == null || !bCryptPasswordEncoder.matches(password, user.getPassword())) {
+        if (user == null ) {
             throw new InvalidArgumentsException("Invalid email or password ");
         }
 
@@ -62,6 +61,15 @@ public class UserService extends DefaultOAuth2UserService {
                 "To reset your password, click the link below:\n" + resetLink);
 
         return "Password reset link has been sent to your email.";
+    }
+
+    public User changePassword(String oldPassword, String newPassword) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        User user = getAutentificatedUser();
+        if(encoder.matches(oldPassword, user.getPassword())){
+            user.setPassword(encoder.encode(newPassword));
+           return repository.save(user);
+        }else return null;
     }
 
     public String createPasswordResetToken(User user) {
