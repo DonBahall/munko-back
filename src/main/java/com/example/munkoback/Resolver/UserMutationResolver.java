@@ -45,13 +45,18 @@ public class UserMutationResolver {
     }
 
     @MutationMapping
-    public String emailConfirmation(@Argument Integer userId) {
-        return service.emailConfirmation(userId);
+    public String emailConfirmation(@Argument Integer userId, @Argument String email) {
+        return service.emailConfirmation(userId, email);
     }
 
     @MutationMapping
     public Boolean enableAccount(@Argument String email_confirm_token) {
         return service.enableAccount(email_confirm_token);
+    }
+
+    @MutationMapping
+    public Boolean changeEmail(@Argument String token, @Argument String email) {
+        return service.changeEmail(token,email);
     }
 
 }

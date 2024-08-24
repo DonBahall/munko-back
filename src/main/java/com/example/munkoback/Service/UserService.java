@@ -81,6 +81,13 @@ public class UserService extends DefaultOAuth2UserService {
     public User findByEmail(String email) {
         return repository.findByEmail(email).orElse(null);
     }
+    public String changeEmail(String newEmail) {
+        if(newEmail.matches(EMAIL_REGEX)){
+            return emailConfirmation(getAutentificatedUser().getId(), newEmail);
+        }else {
+            throw new InvalidArgumentsException("Invalid email ");
+        }
+    }
 
     public boolean resetPassword(String token, String newPassword) {
         String email = passwordResetTokens.get(token);
@@ -117,19 +124,38 @@ public class UserService extends DefaultOAuth2UserService {
         return null;
     }
 
-    public String emailConfirmation(Integer userId){
+    public String emailConfirmation(Integer userId, String email){
         User user = repository.findById(userId).orElse(null);
         if (user == null) {
             return null;
         }
         String token = UUID.randomUUID().toString();
-        confirmTokens.put(token, user.getEmail());
-
         String confirmLink = "https://munko-front.vercel.app/?confirm_token=" + token;
 
-        emailService.emailConfirmation(user.getEmail(), "To confirm your email, click the link below:\n" + confirmLink);
+        if (email != null) {
+            confirmTokens.put(token, email);
+            emailService.emailConfirmation(email, "To confirm your email, click the link below:\n" + confirmLink + "&email=" + email);
+        } else {
+            confirmTokens.put(token, user.getEmail());
+            emailService.emailConfirmation(user.getEmail(), "To confirm your email, click the link below:\n" + confirmLink);
+        }
 
         return "Confirmation link has been sent to your email.";
+    }
+
+    public Boolean changeEmail(String token, String newEmail) {
+        String email = confirmTokens.get(token);
+        if (email == null) {
+            return false;
+        }
+        User user = getAutentificatedUser();
+        if (user != null) {
+            user.setEmail(newEmail);
+            repository.save(user);
+            confirmTokens.remove(token);
+            return true;
+        }
+        return false;
     }
 
     public Boolean enableAccount(String token){

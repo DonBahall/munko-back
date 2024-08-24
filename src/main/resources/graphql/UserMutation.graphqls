@@ -4,8 +4,9 @@ extend type Mutation {
     registration(user: UserInput!): User
     forgotPassword(email: String):String
     resetPassword(reset_token:String, newPassword: String):Boolean
-    emailConfirmation(userId: Int):String
+    emailConfirmation(userId: Int, email: String):String
     enableAccount(email_confirm_token:String):Boolean
     changePassword(oldPassword:String, newPassword: String): User
+    changeEmail(token:String, email: String): String
 }
 
