@@ -41,4 +41,9 @@ public class UserQueryResolver {
         return service.getUserFavorite(service.getAutentificatedUser().getId());
     }
 
+    @QueryMapping
+    public Boolean deleteAccount() {
+        return service.deleteAccount();
+    }
+
 }

@@ -24,9 +24,15 @@ import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserServ
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -143,6 +149,25 @@ public class UserService extends DefaultOAuth2UserService {
         return "Confirmation link has been sent to your email.";
     }
 
+    public String uploadImage(MultipartFile image) {
+        if (image.isEmpty()) {
+            return "Please select an image to upload.";
+        }
+
+        try {
+            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
+
+            Path path = Paths.get( fileName);
+
+            Files.createDirectories(path.getParent());
+
+            Files.write(path, image.getBytes());
+
+            return "Image uploaded successfully: " + fileName;
+        } catch (IOException e) {
+            return "Failed to upload image.";
+        }
+    }
     public Boolean changeEmail(String token, String newEmail) {
         String email = confirmTokens.get(token);
         if (email == null) {
@@ -153,6 +178,15 @@ public class UserService extends DefaultOAuth2UserService {
             user.setEmail(newEmail);
             repository.save(user);
             confirmTokens.remove(token);
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean deleteAccount(){
+        User user = getAutentificatedUser();
+        if (user != null) {
+            repository.delete(user);
             return true;
         }
         return false;
