@@ -87,13 +87,6 @@ public class UserService extends DefaultOAuth2UserService {
     public User findByEmail(String email) {
         return repository.findByEmail(email).orElse(null);
     }
-    public String changeEmail(String newEmail) {
-        if(newEmail.matches(EMAIL_REGEX)){
-            return emailConfirmation(getAutentificatedUser().getId(), newEmail);
-        }else {
-            throw new InvalidArgumentsException("Invalid email ");
-        }
-    }
 
     public boolean resetPassword(String token, String newPassword) {
         String email = passwordResetTokens.get(token);
@@ -149,25 +142,7 @@ public class UserService extends DefaultOAuth2UserService {
         return "Confirmation link has been sent to your email.";
     }
 
-    public String uploadImage(MultipartFile image) {
-        if (image.isEmpty()) {
-            return "Please select an image to upload.";
-        }
 
-        try {
-            String fileName = StringUtils.cleanPath(image.getOriginalFilename());
-
-            Path path = Paths.get( fileName);
-
-            Files.createDirectories(path.getParent());
-
-            Files.write(path, image.getBytes());
-
-            return "Image uploaded successfully: " + fileName;
-        } catch (IOException e) {
-            return "Failed to upload image.";
-        }
-    }
     public Boolean changeEmail(String token, String newEmail) {
         String email = confirmTokens.get(token);
         if (email == null) {

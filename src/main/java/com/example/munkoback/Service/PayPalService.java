@@ -37,10 +37,10 @@ public class PayPalService {
             Address userAddress = user.getAddress();
 
             if (userAddress == null ||
-                    userAddress.getAddressLine1() == null ||
-                    userAddress.getAddressLine2() == null ||
-                    userAddress.getPostalCode() == null ||
+                    userAddress.getDistrict() == null ||
                     userAddress.getCity() == null ||
+                    userAddress.getPostalCode() == null ||
+                    userAddress.getStreet() == null ||
                     userAddress.getCountryCode() == null) {
                 throw new InvalidArgumentsException("Wrong arguments!");
             }
@@ -48,10 +48,10 @@ public class PayPalService {
             ShippingDetail shippingDetail = new ShippingDetail()
                     .name(new Name().fullName(user.getFirstName() + " " + user.getLastName()))
                     .addressPortable(new AddressPortable()
-                            .addressLine1(userAddress.getAddressLine1())
-                            .addressLine2(userAddress.getAddressLine2())
+                            .addressLine1(userAddress.getDistrict())
+                            .addressLine2(userAddress.getCity())
                             .postalCode(userAddress.getPostalCode())
-                            .adminArea2(userAddress.getCity())
+                            .adminArea2(userAddress.getStreet())
                             .countryCode(userAddress.getCountryCode()));
 
             ApplicationContext applicationContext = new ApplicationContext()

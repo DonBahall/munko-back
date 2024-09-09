@@ -17,9 +17,10 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private Long userId;
-    private String addressLine1;
-    private String addressLine2;
-    private String postalCode;
-    private String city;
     private String countryCode;
+    private String district;
+    private String city;
+    private String street;
+    private String house;
+    private String postalCode;
 }
