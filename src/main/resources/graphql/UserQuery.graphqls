@@ -31,6 +31,12 @@ type User{
     address: Address
     role: String
     favorite: [Int]
+    creditCard: [CreditCard]
+}
+
+type CreditCard{
+    id: Int
+    creditCard: String
 }
 
 type Address{

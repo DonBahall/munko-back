@@ -46,6 +46,8 @@ public class User implements UserDetails {
     private List<Integer> favorite;
     private String googleAccountId;
     private Boolean isEnabled;
+    @OneToMany
+    private List<CreditCard> creditCard;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

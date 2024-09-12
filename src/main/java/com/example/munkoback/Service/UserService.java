@@ -276,6 +276,9 @@ public class UserService extends DefaultOAuth2UserService {
         if(request.getFavorite() !=null){
             existing.setFavorite(request.getFavorite());
         }
+        if(request.getCreditCard() !=null){
+            existing.setCreditCard(request.getCreditCard());
+        }
 
         return repository.save(existing);
     }
