@@ -142,7 +142,6 @@ public class UserService extends DefaultOAuth2UserService {
         return "Confirmation link has been sent to your email.";
     }
 
-
     public Boolean changeEmail(String token, String newEmail) {
         String email = confirmTokens.get(token);
         if (email == null) {
