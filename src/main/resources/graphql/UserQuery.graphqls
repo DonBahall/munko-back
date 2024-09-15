@@ -43,11 +43,12 @@ type CreditCard{
 type Address{
     id: Int!
     userId: Int!
-    addressLine1: String
-    addressLine2: String
-    postalCode: String
-    city: String
     countryCode: String
+    district: String
+    city: String
+    street: String
+    house: String
+    postalCode: String
 }
 
 input UserInput{
