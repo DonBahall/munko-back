@@ -19,6 +19,7 @@ type UserDto{
     phone: String
     address: Address
     password: String
+    creditCard: [CreditCard]
 }
 
 type User{
