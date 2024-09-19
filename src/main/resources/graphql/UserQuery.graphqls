@@ -39,6 +39,10 @@ type CreditCard{
     id: Int
     creditCard: String
 }
+input CreditCardInput{
+    id: Int
+    creditCard: String
+}
 
 type Address{
     id: Int!
@@ -62,15 +66,17 @@ input UserInput{
     orders: [OrderItemInput]
     role: String
     favorite: [Int]
+    creditCard: [CreditCardInput]
 }
 
 
 input AddressInput{
     id: Int
     userId: Int!
-    addressLine1: String
-    addressLine2: String
-    postalCode: String
-    city: String
     countryCode: String
+    district: String
+    city: String
+    street: String
+    house: String
+    postalCode: String
 }
