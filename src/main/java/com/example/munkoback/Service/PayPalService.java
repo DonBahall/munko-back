@@ -41,7 +41,7 @@ public class PayPalService {
                     userAddress.getCity() == null ||
                     userAddress.getPostalCode() == null ||
                     userAddress.getStreet() == null ||
-                    userAddress.getCountryCode() == null) {
+                    userAddress.getCountry() == null) {
                 throw new InvalidArgumentsException("Wrong arguments!");
             }
 
@@ -52,7 +52,7 @@ public class PayPalService {
                             .addressLine2(userAddress.getCity())
                             .postalCode(userAddress.getPostalCode())
                             .adminArea2(userAddress.getStreet())
-                            .countryCode(userAddress.getCountryCode()));
+                            .countryCode(userAddress.getCountry()));
 
             ApplicationContext applicationContext = new ApplicationContext()
                     .brandName("Funko Market")

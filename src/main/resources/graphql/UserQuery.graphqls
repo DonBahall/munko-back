@@ -54,7 +54,7 @@ input CreditCardInput{
 type Address{
     id: Int!
     userId: Int!
-    countryCode: String
+    country: String
     district: String
     city: String
     street: String
@@ -80,7 +80,7 @@ input UserInput{
 input AddressInput{
     id: Int
     userId: Int!
-    countryCode: String
+    country: String
     district: String
     city: String
     street: String

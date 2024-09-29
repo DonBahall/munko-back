@@ -281,8 +281,8 @@ public class UserService extends DefaultOAuth2UserService {
             if(request.getAddress().getHouse() !=null){
                 address.setHouse(request.getAddress().getHouse());
             }
-            if(request.getAddress().getCountryCode() !=null){
-                address.setCountryCode(request.getAddress().getCountryCode());
+            if(request.getAddress().getCountry() !=null){
+                address.setCountry(request.getAddress().getCountry());
             }
             if(request.getAddress().getPostalCode() !=null){
                 address.setPostalCode(request.getAddress().getPostalCode());
