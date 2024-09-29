@@ -4,8 +4,11 @@ import com.example.munkoback.Model.FunkoPop.FunkoPop;
 import com.example.munkoback.Model.InvalidArgumentsException;
 import com.example.munkoback.Model.Order.Order;
 
+import com.example.munkoback.Model.User.Address;
+import com.example.munkoback.Model.User.CreditCard;
 import com.example.munkoback.Model.User.Role;
 import com.example.munkoback.Model.User.User;
+import com.example.munkoback.Repository.CreditCardRepository;
 import com.example.munkoback.Repository.UserRepo;
 import com.example.munkoback.Request.AuthenticationRequest;
 import com.example.munkoback.Request.UserRequest;
@@ -44,6 +47,7 @@ public class UserService extends DefaultOAuth2UserService {
     private final UserRepo repository;
     private final JwtService jwtService;
     private final FunkoPopService funkoPopService;
+    private final CreditCardRepository creditCardRepository;
     private final AuthenticationManager authenticationManager;
     @Value("${GOOGLE_TOKENINFO_URL}")
     private String GOOGLE_TOKENINFO_URL;
@@ -267,7 +271,26 @@ public class UserService extends DefaultOAuth2UserService {
             existing.setPassword(passwordEncoder.encode(request.getPassword()));
         }
         if(request.getAddress() !=null){
-            existing.setAddress(request.getAddress());
+            Address address = new Address();
+            if(request.getAddress().getCity() !=null){
+                address.setCity(request.getAddress().getCity());
+            }
+            if(request.getAddress().getDistrict() !=null){
+                address.setDistrict(request.getAddress().getDistrict());
+            }
+            if(request.getAddress().getHouse() !=null){
+                address.setHouse(request.getAddress().getHouse());
+            }
+            if(request.getAddress().getCountryCode() !=null){
+                address.setCountryCode(request.getAddress().getCountryCode());
+            }
+            if(request.getAddress().getPostalCode() !=null){
+                address.setPostalCode(request.getAddress().getPostalCode());
+            }
+            if(request.getAddress().getCity() !=null){
+                address.setCity(request.getAddress().getCity());
+            }
+            existing.setAddress(address);
         }
         if (request.getOrders() !=null){
         existing.setOrders(request.getOrders());
@@ -275,7 +298,8 @@ public class UserService extends DefaultOAuth2UserService {
         if(request.getFavorite() !=null){
             existing.setFavorite(request.getFavorite());
         }
-        if(request.getCreditCard() !=null){
+        if(request.getCreditCard() != null){
+            creditCardRepository.saveAll(request.getCreditCard());
             existing.setCreditCard(request.getCreditCard());
         }
 

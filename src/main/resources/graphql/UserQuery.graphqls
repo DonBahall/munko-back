@@ -37,11 +37,18 @@ type User{
 
 type CreditCard{
     id: Int
-    creditCard: String
+    userId: Int
+    cardNumber: String
+    cardHolderName: String
+    expirationDate: String
 }
+
 input CreditCardInput{
     id: Int
-    creditCard: String
+    userId: Int!
+    cardNumber: String!
+    cardHolderName: String
+    expirationDate: String
 }
 
 type Address{
