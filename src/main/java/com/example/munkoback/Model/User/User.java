@@ -33,6 +33,7 @@ public class User implements UserDetails {
     private String email;
     private String phone;
     private String password;
+    private String photo;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
@@ -54,6 +55,7 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
+
     @Override
     public String getPassword() {
         return password;

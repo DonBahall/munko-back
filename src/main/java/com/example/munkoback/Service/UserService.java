@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 public class UserService extends DefaultOAuth2UserService {
@@ -60,7 +61,7 @@ public class UserService extends DefaultOAuth2UserService {
     public String forgotPassword(String email) {
         User user = findByEmail(email);
 
-        if (user == null ) {
+        if (user == null) {
             throw new InvalidArgumentsException("Invalid email or password ");
         }
 
@@ -76,10 +77,10 @@ public class UserService extends DefaultOAuth2UserService {
     public User changePassword(String oldPassword, String newPassword) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = getAutentificatedUser();
-        if(encoder.matches(oldPassword, user.getPassword())){
+        if (encoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(encoder.encode(newPassword));
-           return repository.save(user);
-        }else return null;
+            return repository.save(user);
+        } else return null;
     }
 
     public String createPasswordResetToken(User user) {
@@ -127,7 +128,7 @@ public class UserService extends DefaultOAuth2UserService {
         return null;
     }
 
-    public String emailConfirmation(Integer userId, String email){
+    public String emailConfirmation(Integer userId, String email) {
         User user = repository.findById(userId).orElse(null);
         if (user == null) {
             return null;
@@ -161,7 +162,7 @@ public class UserService extends DefaultOAuth2UserService {
         return false;
     }
 
-    public Boolean deleteAccount(){
+    public Boolean deleteAccount() {
         User user = getAutentificatedUser();
         if (user != null) {
             repository.delete(user);
@@ -170,7 +171,7 @@ public class UserService extends DefaultOAuth2UserService {
         return false;
     }
 
-    public Boolean enableAccount(String token){
+    public Boolean enableAccount(String token) {
         String email = confirmTokens.get(token);
 
         if (email == null) {
@@ -252,7 +253,7 @@ public class UserService extends DefaultOAuth2UserService {
             throw new InvalidArgumentsException("User does not exist");
         }
         if (request.getFirstName() != null) {
-            if(!request.getFirstName().isEmpty()){
+            if (!request.getFirstName().isEmpty()) {
                 existing.setFirstName(request.getFirstName());
             }
         }
@@ -270,35 +271,35 @@ public class UserService extends DefaultOAuth2UserService {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             existing.setPassword(passwordEncoder.encode(request.getPassword()));
         }
-        if(request.getAddress() !=null){
+        if (request.getAddress() != null) {
             Address address = new Address();
-            if(request.getAddress().getCity() !=null){
+            if (request.getAddress().getCity() != null) {
                 address.setCity(request.getAddress().getCity());
             }
-            if(request.getAddress().getDistrict() !=null){
+            if (request.getAddress().getDistrict() != null) {
                 address.setDistrict(request.getAddress().getDistrict());
             }
-            if(request.getAddress().getHouse() !=null){
+            if (request.getAddress().getHouse() != null) {
                 address.setHouse(request.getAddress().getHouse());
             }
-            if(request.getAddress().getCountry() !=null){
+            if (request.getAddress().getCountry() != null) {
                 address.setCountry(request.getAddress().getCountry());
             }
-            if(request.getAddress().getPostalCode() !=null){
+            if (request.getAddress().getPostalCode() != null) {
                 address.setPostalCode(request.getAddress().getPostalCode());
             }
-            if(request.getAddress().getCity() !=null){
+            if (request.getAddress().getCity() != null) {
                 address.setCity(request.getAddress().getCity());
             }
             existing.setAddress(address);
         }
-        if (request.getOrders() !=null){
-        existing.setOrders(request.getOrders());
+        if (request.getOrders() != null) {
+            existing.setOrders(request.getOrders());
         }
-        if(request.getFavorite() !=null){
+        if (request.getFavorite() != null) {
             existing.setFavorite(request.getFavorite());
         }
-        if(request.getCreditCard() != null){
+        if (request.getCreditCard() != null) {
             creditCardRepository.saveAll(request.getCreditCard());
             existing.setCreditCard(request.getCreditCard());
         }
@@ -327,6 +328,10 @@ public class UserService extends DefaultOAuth2UserService {
         User user = repository.findById(id).orElse(null);
         if (user != null) {
             return funkoPopService.getUserFavorite(user.getFavorite());
-        }else return null;
+        } else return null;
+    }
+
+    public void save(User user) {
+        repository.save(user);
     }
 }

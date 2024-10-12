@@ -4,43 +4,43 @@ import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Request.UserRequest;
 import com.example.munkoback.Service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
+@Slf4j
 public class UserMutationResolver {
 
     private final UserService service;
 
-    @RequestMapping(value="/upload", method=RequestMethod.POST)
-    public @ResponseBody String handleFileUpload(
-            @RequestParam("file") MultipartFile file){
+    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    public String handleFileUpload(
+            @RequestParam("file") MultipartFile file) {
         User user = service.getAutentificatedUser();
         if (!file.isEmpty()) {
             try {
-                byte[] bytes = file.getBytes();
-                BufferedOutputStream stream =
-                        new BufferedOutputStream(new FileOutputStream(new File("photos/" + user.getId() + ".jpg")));
-                stream.write(bytes);
-                stream.close();
+                Path uploadDir = Paths.get("src/main/resources/static/user_photo");
+                Path filePath = uploadDir.resolve(user.getId() + ".jpg");
+                if (Files.exists(filePath)) {
+                    Files.delete(filePath);
+                    log.info("File with the same name was deleted " + filePath);
+                }
+                Files.write(filePath, file.getBytes());
 
-                return "Вы удачно загрузили " + " -uploaded !";
+                return "Succesfully" + " -uploaded !";
             } catch (Exception e) {
-                return "Вам не удалось загрузить "+ " => " + e.getMessage();
+                return "Error " + " => " + e.getMessage();
             }
         } else {
-            return "Вам не удалось загрузить " + " потому что файл пустой.";
+            return "Error";
         }
     }
 
@@ -66,12 +66,12 @@ public class UserMutationResolver {
 
     @MutationMapping
     public User changePassword(@Argument String oldPassword, @Argument String newPassword) {
-        return service.changePassword(oldPassword,newPassword);
+        return service.changePassword(oldPassword, newPassword);
     }
 
     @MutationMapping
     public Boolean resetPassword(@Argument String reset_token, @Argument String newPassword) {
-        return service.resetPassword(reset_token,newPassword);
+        return service.resetPassword(reset_token, newPassword);
     }
 
     @MutationMapping
@@ -86,7 +86,7 @@ public class UserMutationResolver {
 
     @MutationMapping
     public Boolean changeEmail(@Argument String token, @Argument String email) {
-        return service.changeEmail(token,email);
+        return service.changeEmail(token, email);
     }
 
 }

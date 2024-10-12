@@ -133,13 +133,15 @@ public class FunkoPopService {
             default -> Sort.unsorted();
         };
     }
+
     public List<FunkoPop> getUserFavorite(List<Integer> ids) {
-       return repository.findAllById(ids);
+        return repository.findAllById(ids);
     }
 
     public FunkoPop getItem(Integer id) {
         return repository.findById(id).orElse(null);
     }
+
     public AttributeCollection getAllAttributes() {
         List<FunkoPop> popList = repository.findAll();
         return convertToAttributeCollection(popList);
@@ -165,11 +167,11 @@ public class FunkoPopService {
         return attributeCollection;
     }
 
-   @Setter
-   @Getter
-   @AllArgsConstructor
-   @NoArgsConstructor
-   public static class AttributeCollection {
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AttributeCollection {
         private List<String> categories;
         private List<String> collections;
         private List<String> series;
