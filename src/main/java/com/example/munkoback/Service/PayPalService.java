@@ -62,14 +62,14 @@ public class PayPalService {
                     .userAction("PAY_NOW")
                     .shippingPreference("SET_PROVIDED_ADDRESS");
             orderRequest.applicationContext(applicationContext);
-
+            BigDecimal value =  BigDecimal.valueOf(Double.parseDouble(prise) / 100);
             List<PurchaseUnitRequest> purchaseUnitRequests = new ArrayList<>();
             PurchaseUnitRequest purchaseUnitRequest = new PurchaseUnitRequest()
                     .referenceId(referenceId)
                     .description("Paid for funko")
                     .customId(customId)
                     .softDescriptor("FunkoPurchase")
-                    .amountWithBreakdown(new AmountWithBreakdown().currencyCode("USD").value(new BigDecimal(prise).toString()))
+                    .amountWithBreakdown(new AmountWithBreakdown().currencyCode("USD").value(value.toString()))
                     .shippingDetail(shippingDetail);
             purchaseUnitRequests.add(purchaseUnitRequest);
             orderRequest.purchaseUnits(purchaseUnitRequests);
