@@ -272,7 +272,7 @@ public class UserService extends DefaultOAuth2UserService {
             existing.setPassword(passwordEncoder.encode(request.getPassword()));
         }
         if (request.getAddress() != null) {
-            Address address = new Address();
+            Address address = user.getAddress();
             if (request.getAddress().getUserId() != null) {
                 address.setUserId(request.getAddress().getUserId());
             }
