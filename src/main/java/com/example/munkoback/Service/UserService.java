@@ -273,6 +273,9 @@ public class UserService extends DefaultOAuth2UserService {
         }
         if (request.getAddress() != null) {
             Address address = new Address();
+            if (request.getAddress().getUserId() != null) {
+                address.setUserId(request.getAddress().getUserId());
+            }
             if (request.getAddress().getCity() != null) {
                 address.setCity(request.getAddress().getCity());
             }
