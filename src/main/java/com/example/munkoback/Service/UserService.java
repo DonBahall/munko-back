@@ -54,6 +54,10 @@ public class UserService extends DefaultOAuth2UserService {
     private String GOOGLE_TOKENINFO_URL;
     @Value("${EMAIL_REGEX}")
     private String EMAIL_REGEX;
+    @Value("${PASSWORD_REGEX}")
+    private String PASSWORD_REGEX;
+    @Value("${NAME_REGEX}")
+    private String NAME_REGEX;
     private final EmailService emailService;
     private Map<String, String> passwordResetTokens = new HashMap<>();
     private Map<String, String> confirmTokens = new HashMap<>();
@@ -153,7 +157,7 @@ public class UserService extends DefaultOAuth2UserService {
             return false;
         }
         User user = getAutentificatedUser();
-        if (user != null) {
+        if (user != null && checkEmail(newEmail)) {
             user.setEmail(newEmail);
             repository.save(user);
             confirmTokens.remove(token);
@@ -187,13 +191,21 @@ public class UserService extends DefaultOAuth2UserService {
         }
         return false;
     }
+    public boolean checkEmail(String email) {
+        if(email == null || email.isEmpty()) return false;
+        if (!email.matches(EMAIL_REGEX)) return false;
+        return true;
+    }
 
     public User registerUser(User request) {
         if (repository.existsByEmail(request.getEmail())) {
             throw new InvalidArgumentsException("This email already existing");
         }
-        if (!request.getEmail().matches(EMAIL_REGEX) || request.getFirstName().equals("")) {
-            throw new InvalidArgumentsException("Arguments in wrong format!");
+        if (!checkEmail(request.getEmail()) || !request.getFirstName().matches(NAME_REGEX)) {
+            throw new InvalidArgumentsException("Email is incorrect!");
+        }
+        if(!request.getFirstName().matches(NAME_REGEX) || !request.getPassword().matches(PASSWORD_REGEX)) {
+            throw new InvalidArgumentsException("Name or password incorrect!");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String hashedPassword = passwordEncoder.encode(request.getPassword());
@@ -253,7 +265,7 @@ public class UserService extends DefaultOAuth2UserService {
             throw new InvalidArgumentsException("User does not exist");
         }
         if (request.getFirstName() != null) {
-            if (!request.getFirstName().isEmpty()) {
+            if (!request.getFirstName().isEmpty() && request.getFirstName().matches(NAME_REGEX)) {
                 existing.setFirstName(request.getFirstName());
             }
         }
@@ -267,7 +279,7 @@ public class UserService extends DefaultOAuth2UserService {
         if (request.getPhone() != null) {
             existing.setPhone(request.getPhone());
         }
-        if (request.getPassword() != null) {
+        if (request.getPassword() != null && request.getPassword().matches(PASSWORD_REGEX)) {
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             existing.setPassword(passwordEncoder.encode(request.getPassword()));
         }
