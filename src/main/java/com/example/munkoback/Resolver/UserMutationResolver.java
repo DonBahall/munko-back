@@ -57,7 +57,7 @@ public class UserMutationResolver {
         User user = service.getAutentificatedUser();
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(BUCKET)
-                .key(user.getId().toString())
+                .key(user.getId().toString()  + ".png")
                 .build();
 
         ResponseBytes<GetObjectResponse> responseBytes = s3.getObjectAsBytes(getObjectRequest);
