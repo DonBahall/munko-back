@@ -23,7 +23,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    @Value("ENV")
+    @Value("${ENV}")
     private String ENV;
 
     private final UserRepo repository;
