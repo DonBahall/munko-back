@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - /Users/dmytrocharoian/.aws/credentials:/root/.aws/credentials:ro
     ports:
       - "8080:8080"
     networks:

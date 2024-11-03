@@ -59,8 +59,8 @@ public class UserService extends DefaultOAuth2UserService {
     @Value("${NAME_REGEX}")
     private String NAME_REGEX;
     private final EmailService emailService;
-    private Map<String, String> passwordResetTokens = new HashMap<>();
-    private Map<String, String> confirmTokens = new HashMap<>();
+    private final Map<String, String> passwordResetTokens = new HashMap<>();
+    private final Map<String, String> confirmTokens = new HashMap<>();
 
     public String forgotPassword(String email) {
         User user = findByEmail(email);
@@ -191,6 +191,7 @@ public class UserService extends DefaultOAuth2UserService {
         }
         return false;
     }
+
     public boolean checkEmail(String email) {
         if(email == null || email.isEmpty()) return false;
         if (!email.matches(EMAIL_REGEX)) return false;
@@ -204,7 +205,7 @@ public class UserService extends DefaultOAuth2UserService {
         if (!checkEmail(request.getEmail()) || !request.getFirstName().matches(NAME_REGEX)) {
             throw new InvalidArgumentsException("Email is incorrect!");
         }
-        if(!request.getFirstName().matches(NAME_REGEX) || !request.getPassword().matches(PASSWORD_REGEX)) {
+        if(!request.getPassword().matches(PASSWORD_REGEX)) {
             throw new InvalidArgumentsException("Name or password incorrect!");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();

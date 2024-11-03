@@ -7,12 +7,19 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,28 +27,47 @@ import java.nio.file.Paths;
 public class UserMutationResolver {
 
     private final UserService service;
+    private final String BUCKET = "munkobucket";
+    private final S3Client s3 = S3Client.builder().region(Region.US_WEST_2).build();;
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/v1/upload", method = RequestMethod.POST)
     public String handleFileUpload(
             @RequestParam("file") MultipartFile file) {
         User user = service.getAutentificatedUser();
-        if (!file.isEmpty()) {
-            try {
-                Path uploadDir = Paths.get("src/main/resources/static/user_photo");
-                Path filePath = uploadDir.resolve(user.getId() + ".jpg");
-                if (Files.exists(filePath)) {
-                    Files.delete(filePath);
-                    log.info("File with the same name was deleted " + filePath);
-                }
-                Files.write(filePath, file.getBytes());
+        String key = user.getId().toString();
 
-                return "Succesfully" + " -uploaded !";
-            } catch (Exception e) {
-                return "Error " + " => " + e.getMessage();
-            }
-        } else {
-            return "Error";
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(BUCKET)
+                    .key(key)
+                    .build();
+
+            s3.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+
+            return "File downloaded: " + key;
+        } catch (IOException e) {
+            return "Error downloading file: " + e.getMessage();
         }
+    }
+
+    @RequestMapping(value = "/rest/v1/getFile", method = RequestMethod.GET)
+    public ResponseEntity<byte[]> handleGetFile() {
+        User user = service.getAutentificatedUser();
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket(BUCKET)
+                .key(user.getId().toString())
+                .build();
+        
+        ResponseBytes<GetObjectResponse> responseBytes = s3.getObjectAsBytes(getObjectRequest);
+        byte[] content = responseBytes.asByteArray();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + user.getId().toString());
+        headers.add(HttpHeaders.CONTENT_TYPE, "image/png");
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(content);
     }
 
     @MutationMapping
