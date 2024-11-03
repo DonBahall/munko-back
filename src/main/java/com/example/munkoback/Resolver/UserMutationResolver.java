@@ -1,5 +1,6 @@
 package com.example.munkoback.Resolver;
 
+import com.example.munkoback.Model.InvalidArgumentsException;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Request.UserRequest;
 import com.example.munkoback.Service.UserService;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
@@ -35,6 +35,11 @@ public class UserMutationResolver {
     @RequestMapping(value = "/rest/v1/upload", method = RequestMethod.POST)
     public String handleFileUpload(
             @RequestParam("file") MultipartFile file) {
+        final String fileName = file.getOriginalFilename();
+        if (fileName == null)throw new InvalidArgumentsException("File must be a PNG or JPEG file");
+        if (!fileName.contains(".png") || !fileName.contains(".jpg") || !fileName.contains(".jpeg")) {
+            throw new InvalidArgumentsException("File must be a PNG or JPEG file");
+        }
         User user = service.getAutentificatedUser();
         String key = user.getId().toString() + ".png";
 
