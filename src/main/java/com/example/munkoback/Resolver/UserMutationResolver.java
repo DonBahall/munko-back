@@ -34,7 +34,7 @@ public class UserMutationResolver {
     public String handleFileUpload(
             @RequestParam("file") MultipartFile file) {
         User user = service.getAutentificatedUser();
-        String key = user.getId().toString();
+        String key = user.getId().toString() + ".png";
 
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -57,7 +57,7 @@ public class UserMutationResolver {
                 .bucket(BUCKET)
                 .key(user.getId().toString())
                 .build();
-        
+
         ResponseBytes<GetObjectResponse> responseBytes = s3.getObjectAsBytes(getObjectRequest);
         byte[] content = responseBytes.asByteArray();
 
