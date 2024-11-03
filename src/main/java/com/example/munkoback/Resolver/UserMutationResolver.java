@@ -36,9 +36,9 @@ public class UserMutationResolver {
     public String handleFileUpload(
             @RequestParam("file") MultipartFile file) {
         final String fileName = file.getOriginalFilename();
-        if (fileName == null)throw new InvalidArgumentsException("File must be a PNG or JPEG file");
-        if (!fileName.contains(".png") || !fileName.contains(".jpg") || !fileName.contains(".jpeg")) {
-            throw new InvalidArgumentsException("File must be a PNG or JPEG file");
+        if (fileName == null) return ("Filename cannot be null");
+        if (!fileName.contains(".png") && !fileName.contains(".jpg") && !fileName.contains(".jpeg")) {
+            return ("File must be a PNG or JPEG file");
         }
         User user = service.getAutentificatedUser();
         String key = user.getId().toString() + ".png";
