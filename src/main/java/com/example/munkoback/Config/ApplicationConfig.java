@@ -23,22 +23,13 @@ import software.amazon.awssdk.services.s3.S3Client;
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    @Value("${ENV}")
-    private String ENV;
 
     private final UserRepo repository;
+
     @Bean
     public S3Client s3Client() {
-        AwsCredentialsProvider credentialsProvider;
-
-        if (ENV.equals("production")) {
-            credentialsProvider = EnvironmentVariableCredentialsProvider.create();
-        } else {
-            credentialsProvider = ProfileCredentialsProvider.create();
-        }
-
         return S3Client.builder()
-                .credentialsProvider(credentialsProvider)
+                .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
                 .region(Region.US_WEST_2)
                 .build();
     }

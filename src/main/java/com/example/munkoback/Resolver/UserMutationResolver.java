@@ -1,6 +1,5 @@
 package com.example.munkoback.Resolver;
 
-import com.example.munkoback.Model.InvalidArgumentsException;
 import com.example.munkoback.Model.User.User;
 import com.example.munkoback.Request.UserRequest;
 import com.example.munkoback.Service.UserService;
@@ -9,18 +8,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import software.amazon.awssdk.core.ResponseBytes;
+import software.amazon.awssdk.auth.credentials.EnvironmentVariableCredentialsProvider;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
-import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 
 import java.io.IOException;
+import java.time.Duration;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,23 +59,28 @@ public class UserMutationResolver {
     }
 
     @RequestMapping(value = "/rest/v1/getFile", method = RequestMethod.GET)
-    public ResponseEntity<byte[]> handleGetFile() {
+    public ResponseEntity<String> handleGetFile() {
         User user = service.getAutentificatedUser();
         GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(BUCKET)
-                .key(user.getId().toString()  + ".png")
+                .key(user.getId().toString() + ".png")
                 .build();
 
-        ResponseBytes<GetObjectResponse> responseBytes = s3.getObjectAsBytes(getObjectRequest);
-        byte[] content = responseBytes.asByteArray();
+        S3Presigner presigner = S3Presigner.builder()
+                .region(Region.US_WEST_2)
+                .credentialsProvider(EnvironmentVariableCredentialsProvider.create())
+                .build();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + user.getId().toString());
-        headers.add(HttpHeaders.CONTENT_TYPE, "image/png");
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(content);
+        Duration duration = Duration.ofHours(6);
+        PresignedGetObjectRequest presignedRequest = presigner.presignGetObject(b -> b
+                .getObjectRequest(getObjectRequest)
+                .signatureDuration(duration));
+
+
+        String url = presignedRequest.url().toString();
+
+        return ResponseEntity.ok(url);
     }
 
     @MutationMapping
