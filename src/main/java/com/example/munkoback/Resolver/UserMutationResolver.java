@@ -5,6 +5,7 @@ import com.example.munkoback.Request.UserRequest;
 import com.example.munkoback.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.http.HttpHeaders;
@@ -28,7 +29,8 @@ public class UserMutationResolver {
 
     private final UserService service;
     private final String BUCKET = "munkobucket";
-    private final S3Client s3 = S3Client.builder().region(Region.US_WEST_2).build();;
+    @Autowired
+    private final S3Client s3;
 
     @RequestMapping(value = "/rest/v1/upload", method = RequestMethod.POST)
     public String handleFileUpload(
