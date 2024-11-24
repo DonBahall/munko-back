@@ -20,6 +20,7 @@ public class ReviewService {
         return repository.findAll();
     }
     public List<Review> getFunkoReviews(Integer funkoId){
+
         return repository.findAllByFunkoId(funkoId);
     }
 
@@ -28,7 +29,7 @@ public class ReviewService {
         if(getAllReviews().contains(repository.findByFunkoIdAndUserId(entity.getFunkoId(), entity.getUserId()))) {
             throw new InvalidArgumentsException("User already have a review");
         }
-        if(entity.getStar() < 0 || entity.getStar() > 5 ) throw new InvalidArgumentsException("Invalid arguments");
+        if(entity.getStar() < 1 || entity.getStar() > 5 ) throw new InvalidArgumentsException("Invalid arguments");
         if(entity.getReview().length() > 300) throw new InvalidArgumentsException("Invalid arguments");
         User user = userService.getAutentificatedUser();
         if(!Objects.equals(user.getId(), entity.getUserId())){
@@ -39,7 +40,7 @@ public class ReviewService {
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public Review updateReview(Review entity){
         User user = userService.getAutentificatedUser();
-        if(entity.getId() == null || entity.getStar() < 0 || entity.getStar() > 5) {
+        if(entity.getId() == null || entity.getStar() < 1 || entity.getStar() > 5) {
             throw new InvalidArgumentsException("Invalid arguments");
         }
         Review existing = repository.findById(entity.getId()).orElse(null);
